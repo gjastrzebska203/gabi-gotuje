@@ -70,3 +70,34 @@ router.get("/average/:recipe_id", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// aktualizacja oceny
+router.put(":/id", authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { rating } = req.body;
+
+    if (!rating || rating < 1 || rating > 5) {
+      return res
+        .status(400)
+        .json({ error: "Ocena musi być w przedziale od 1 do 5" });
+    }
+
+    const existingRating = await RatingModel.findOne({
+      _id: id,
+      user_id: req.user.id,
+    });
+    if (!existingRating) {
+      return res
+        .status(404)
+        .json({ error: "Ocena nie została znaleziona lub brak uprawnień" });
+    }
+
+    existingRating.rating = rating;
+    await existingRating.save();
+
+    res.json(existingRating);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
