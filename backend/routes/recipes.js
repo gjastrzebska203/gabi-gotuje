@@ -39,4 +39,32 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.put("/:id", authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, ingredients, steps, iimage } = req.body;
+
+    const recipe = await RecipeModel.findById(id);
+    if (!recipe) {
+      return res.status(404).json({ error: "Przepis nie został znaleziony" });
+    }
+
+    if (recipe.created_by !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: "Brak uprawnień do edytowania tego przepisu" });
+    }
+
+    if (title) recipe.title = title;
+    if (ingredients) recipe.ingredients = ingredients;
+    if (steps) recipe.steps = steps;
+    if (image) recipe.image = image;
+
+    const updatedRecipe = await recipe.save();
+    res.json(updatedRecipe);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
