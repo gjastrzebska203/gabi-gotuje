@@ -67,4 +67,26 @@ router.put("/:id", authenticate, async (req, res) => {
   }
 });
 
+router.delete("/:id", authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const recipe = await RecipeModel.findById(id);
+    if (!recipe) {
+      return res.status(404).json({ error: "Przepis nie został znaleziony" });
+    }
+
+    if (recipe.created_by !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: "Brak uprawnień do usunięcia wybranego przepisu" });
+    }
+
+    await recipe.deleteOne();
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 module.exports = router;
