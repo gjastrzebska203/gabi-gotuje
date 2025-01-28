@@ -1,7 +1,8 @@
 const express = require("express");
-const UserModel = require("../models/UserModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const UserModel = require("../models/UserModel");
+const authenticate = require("../middlewares/auth");
 const router = express.Router();
 
 // rejestracja
@@ -79,6 +80,64 @@ router.get("/me", async (req, res) => {
     }
 
     res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.put("/:id", authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, email, password } = req.body;
+
+    if (req.user.id !== id) {
+      return res
+        .status(403)
+        .json({ error: "Brak uprawnień do edytowania tego konta" });
+    }
+
+    const updates = {};
+    if (username) updates.username = username;
+    if (email) updates.email = email;
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      updates.password = await bcrypt.hash(password, salt);
+    }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(id, updates, {
+      new: true,
+    }).select("-password");
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ error: "Użytkownik nie został znaleziony" });
+    }
+
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete("/:id", authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (req.user.id !== id) {
+      return res
+        .status(403)
+        .json({ error: "Brak uprawnień do usunięcia tego konta" });
+    }
+
+    const deletedUser = await UserModel.findByIdAndDelete(id);
+    if (!deletedUser) {
+      return res
+        .status(404)
+        .json({ error: "Użytkownik nie został znaleziony" });
+    }
+
+    res.status(204).send();
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
