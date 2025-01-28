@@ -101,3 +101,27 @@ router.put(":/id", authenticate, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+// usunięcie oceny
+router.delete("/:id", authenticate, async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const existingRating = await RatingModel.findOne({
+      _id: id,
+      user_id: req.user.id,
+    });
+    if (!existingRating) {
+      return res
+        .status(404)
+        .json({ error: "Ocena nie została znaleziona lub brak uprawnień" });
+    }
+
+    await existingRating.deleteOne();
+    res.status(204).send();
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+module.exports = router;

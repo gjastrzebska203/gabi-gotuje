@@ -9,6 +9,6 @@ const router = express.Router();
 router.use("/recipes", recipesRoutes);
 router.use("/users", usersRoutes);
 router.use("/comments", commentsRoutes);
-// router.use("/ratings", ratingsRoutes);
+router.use("/ratings", ratingsRoutes);
 
 module.exports = router;
