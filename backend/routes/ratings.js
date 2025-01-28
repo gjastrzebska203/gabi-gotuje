@@ -2,6 +2,7 @@ const express = require("express");
 const RatingModel = require("../models/RatingModel");
 const RecipeModel = require("../models/RecipeModel");
 const authenticate = require("../middlewares/auth");
+const { default: mongoose } = require("mongoose");
 const router = express.Router();
 
 // dodanie oceny
@@ -43,6 +44,29 @@ router.post("/", authenticate, async (req, res) => {
     await newRating.save();
     res.status(201).json(newRating);
   } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// pobranie średniej oceny
+router.get("/average/:recipe_id", async (req, res) => {
+  try {
+    const { recipe_id } = req.params;
+
+    const recipe = await RecipeModel.findById(recipe_id);
+    if (!recipe) {
+      return res.status(404).json({ error: "Przepis nie został znaleziony" });
+    }
+
+    const ratings = await RatingModel.aggregate([
+      { $match: { recipe_id: mongoose.Types.ObjectId(recipe_id) } },
+      { $group: { _id: "$recipe_id", averageRating: { $avg: "$rating" } } },
+    ]);
+
+    const averageRating = ratings.length > 0 ? ratings[0].averageRating : 0;
+
+    res.json({ recipe_id, averageRating });
+  } catch {
     res.status(500).json({ error: err.message });
   }
 });
