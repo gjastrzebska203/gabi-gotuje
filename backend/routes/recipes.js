@@ -1,11 +1,27 @@
 const express = require("express");
 const RecipeModel = require("../models/RecipeModel");
+const authenticate = require("../middlewares/auth");
 const router = express.Router();
 
 // dodawanie przepisu
 router.post("/", async (req, res) => {
   try {
-    const recipe = new RecipeModel(req.body);
+    const { title, ingredients, steps, image } = req.body;
+
+    if (!title || !ingredients || !steps) {
+      return res
+        .status(400)
+        .json({ error: "Pola title, ingredients i steps są wymagane" });
+    }
+
+    const recipe = new RecipeModel({
+      title,
+      ingredients,
+      steps,
+      image,
+      created_by: req.user.id,
+    });
+
     await recipe.save();
     res.status(201).json(recipe);
   } catch (err) {
