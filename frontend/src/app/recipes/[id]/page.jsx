@@ -11,9 +11,12 @@ export default function RecipeDetailsPage() {
   const [recipe, setRecipe] = useState(null);
   const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState("");
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editText, setEditText] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -55,6 +58,7 @@ export default function RecipeDetailsPage() {
         );
         console.log("ID użytkownika:", res.data._id);
         setUserId(res.data._id);
+        setUsername(res.data.username);
       } catch (err) {
         setError("Błąd pobierania danych użytkownika");
       }
@@ -105,6 +109,35 @@ export default function RecipeDetailsPage() {
     }
   };
 
+  const handleEditComment = (comment) => {
+    setEditingCommentId(comment._id);
+    setEditText(comment.text);
+  };
+
+  const handleUpdateComment = async (commentId) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return alert("Musisz być zalogowany, aby edytować komentarz.");
+    }
+
+    try {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/comments/${commentId}`,
+        { text: editText },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setComments(
+        comments.map((c) => (c._id === commentId ? response.data : c))
+      );
+      setEditingCommentId(null);
+      setEditText("");
+      window.location.reload();
+    } catch (err) {
+      setError("Błąd podczas edycji komentarza");
+    }
+  };
+
   if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
   if (!recipe) return <p>Nie znaleziono przepisu.</p>;
@@ -141,7 +174,29 @@ export default function RecipeDetailsPage() {
         <ul>
           {comments.map((comment) => (
             <li key={comment._id}>
-              <strong>{comment.user_id.username}</strong>: {comment.text}
+              <strong>{comment.user_id.username}</strong>:{" "}
+              {editingCommentId === comment._id ? (
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
+              ) : (
+                comment.text
+              )}
+              {userId === comment.user_id._id && (
+                <>
+                  {editingCommentId === comment._id ? (
+                    <button onClick={() => handleUpdateComment(comment._id)}>
+                      Zapisz
+                    </button>
+                  ) : (
+                    <button onClick={() => handleEditComment(comment)}>
+                      Edytuj
+                    </button>
+                  )}
+                </>
+              )}
             </li>
           ))}
         </ul>

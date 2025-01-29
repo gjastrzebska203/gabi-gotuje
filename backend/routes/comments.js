@@ -38,34 +38,29 @@ router.get("/:recipe_id", async (req, res) => {
   }
 });
 
-// // aktualizowanie komentarza
-// router.put("/:id", async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const { content } = req.body;
+// aktualizowanie komentarza
+router.put("/:id", authenticate, async (req, res) => {
+  try {
+    const { text } = req.body;
+    const comment = await CommentModel.findById(req.params.id);
 
-//     if (!content) {
-//       return res
-//         .status(400)
-//         .json({ error: "Treść komentarza (content) jest wymagana" });
-//     }
+    if (!comment) {
+      return res.status(404).json({ error: "Komentarz nie znaleziony" });
+    }
 
-//     const updatedComment = await CommentModel.findByIdAndUpdate(
-//       id,
-//       { content },
-//       { new: true }
-//     );
-//     if (!updatedComment) {
-//       return res
-//         .status(404)
-//         .json({ error: "Komentarz o podanym ID nie istnieje" });
-//     }
+    if (comment.user_id.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: "Nie masz uprawnień do edytowania tego komentarza" });
+    }
 
-//     res.json(updatedComment);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
+    comment.text = text || comment.text;
+    await comment.save();
+    res.status(200).json(comment);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 // // usuwanie komentarza
 // router.delete("/:id", async (req, res) => {
