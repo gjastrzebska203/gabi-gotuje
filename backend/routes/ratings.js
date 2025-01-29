@@ -74,7 +74,6 @@ router.get("/average/:recipe_id", async (req, res) => {
 // aktualizacja oceny
 router.put(":/id", authenticate, async (req, res) => {
   try {
-    const { id } = req.params;
     const { rating } = req.body;
 
     if (!rating || rating < 1 || rating > 5) {
@@ -83,14 +82,15 @@ router.put(":/id", authenticate, async (req, res) => {
         .json({ error: "Ocena musi być w przedziale od 1 do 5" });
     }
 
-    const existingRating = await RatingModel.findOne({
-      _id: id,
-      user_id: req.user.id,
-    });
+    const existingRating = await RatingModel.findOne(req.params.id);
     if (!existingRating) {
       return res
         .status(404)
         .json({ error: "Ocena nie została znaleziona lub brak uprawnień" });
+    }
+
+    if (existingRating.user_id.toString() !== req.user.id) {
+      return res.status(403).json({ error: "Nie możesz edytować tej oceny" });
     }
 
     existingRating.rating = rating;
@@ -105,20 +105,18 @@ router.put(":/id", authenticate, async (req, res) => {
 // usunięcie oceny
 router.delete("/:id", authenticate, async (req, res) => {
   try {
-    const { id } = req.params;
+    const userRating = await RatingModel.findById(req.params.id);
 
-    const existingRating = await RatingModel.findOne({
-      _id: id,
-      user_id: req.user.id,
-    });
-    if (!existingRating) {
-      return res
-        .status(404)
-        .json({ error: "Ocena nie została znaleziona lub brak uprawnień" });
+    if (!userRating) {
+      return res.status(404).json({ error: "Ocena nie została znaleziona" });
     }
 
-    await existingRating.deleteOne();
-    res.status(204).send();
+    if (userRating.user_id.toString() !== req.user.id) {
+      return res.status(403).json({ error: "Nie możesz usunąć tej oceny" });
+    }
+
+    await userRating.deleteOne();
+    res.status(204).json({ message: "Ocena została usunięta" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

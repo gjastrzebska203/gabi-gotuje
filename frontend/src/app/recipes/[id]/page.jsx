@@ -139,7 +139,6 @@ export default function RecipeDetailsPage() {
   };
 
   const handleDeleteComment = async (commentId) => {
-    // console.log(commentId);
     const token = localStorage.getItem("token");
     if (!token) {
       return alert("Musisz być zalogowany, aby usunąć komentarz.");
@@ -194,8 +193,7 @@ export default function RecipeDetailsPage() {
         <ul>
           {comments.map((comment) => (
             <li key={comment._id}>
-              {/* <strong>{comment.user_id.username}</strong>:{" "} */}
-              <strong>{comment._id}</strong>:{" "}
+              <strong>{comment.user_id.username}</strong>:{" "}
               {editingCommentId === comment._id ? (
                 <input
                   type="text"
