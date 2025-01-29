@@ -1,22 +1,21 @@
+"use client";
 const express = require("express");
 const RecipeModel = require("../models/RecipeModel");
 const authenticate = require("../middlewares/auth");
 const router = express.Router();
 
 // dodawanie przepisu
-router.post("/", async (req, res) => {
+router.post("/", authenticate, async (req, res) => {
   try {
     const { title, description, ingredients, steps, image } = req.body;
 
-    if (!title || !description || !ingredients || !steps) {
-      return res
-        .status(400)
-        .json({
-          error: "Pola title, description, ingredients i steps są wymagane",
-        });
+    if (!title || !description || !ingredients.length || !steps.length) {
+      return res.status(400).json({
+        error: "Wszystkie pola są wymagane!",
+      });
     }
 
-    const recipe = new RecipeModel({
+    const newRecipe = new RecipeModel({
       title,
       description,
       ingredients,
@@ -25,8 +24,8 @@ router.post("/", async (req, res) => {
       created_by: req.user.id,
     });
 
-    await recipe.save();
-    res.status(201).json(recipe);
+    await newRecipe.save();
+    res.status(201).json(newRecipe);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
