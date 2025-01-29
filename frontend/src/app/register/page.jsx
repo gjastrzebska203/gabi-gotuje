@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import Navigation from "../components/Navigation";
 
 export default function RegisterPage() {
   const { register, handleSubmit } = useForm();
@@ -23,6 +24,7 @@ export default function RegisterPage() {
 
   return (
     <div className="page">
+      <Navigation></Navigation>
       <h2>Rejestracja</h2>
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit(onSubmit)}>
