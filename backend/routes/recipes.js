@@ -52,6 +52,18 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const recipe = await RecipeModel.findById(req.params.id);
+    if (!recipe)
+      return res.status(404).json({ error: "Przepis nie został znaleziony" });
+
+    res.json(recipe);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.put("/:id", authenticate, async (req, res) => {
   try {
     const { id } = req.params;
