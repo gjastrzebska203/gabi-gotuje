@@ -6,16 +6,19 @@ const router = express.Router();
 // dodawanie przepisu
 router.post("/", async (req, res) => {
   try {
-    const { title, ingredients, steps, image } = req.body;
+    const { title, description, ingredients, steps, image } = req.body;
 
-    if (!title || !ingredients || !steps) {
+    if (!title || !description || !ingredients || !steps) {
       return res
         .status(400)
-        .json({ error: "Pola title, ingredients i steps są wymagane" });
+        .json({
+          error: "Pola title, description, ingredients i steps są wymagane",
+        });
     }
 
     const recipe = new RecipeModel({
       title,
+      description,
       ingredients,
       steps,
       image,
@@ -32,7 +35,18 @@ router.post("/", async (req, res) => {
 // pobieranie wszystkich przepisów
 router.get("/", async (req, res) => {
   try {
-    const recipes = await RecipeModel.find();
+    const { search } = req.query;
+    let query = {};
+
+    if (search) {
+      query = {
+        $or: [
+          { title: { $regex: search, $options: "i" } },
+          { description: { $regex: search, $options: "i" } },
+        ],
+      };
+    }
+    const recipes = await RecipeModel.find(query);
     res.json(recipes);
   } catch (err) {
     res.status(500).json({ error: err.message });
