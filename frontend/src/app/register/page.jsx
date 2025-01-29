@@ -15,7 +15,7 @@ export default function RegisterPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/users/register`,
         data
       );
-      router.push("/login");
+      router.push("/log-in");
     } catch (err) {
       setError(err.response?.data?.error || "Wystąpił błąd rejestracji");
     }
