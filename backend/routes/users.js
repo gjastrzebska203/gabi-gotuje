@@ -85,6 +85,16 @@ router.get("/me", async (req, res) => {
   }
 });
 
+// pobranie wszystkich użytkowników
+router.get("/", async (req, res) => {
+  try {
+    const users = await UserModel.find().select("_id username email role");
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // pobranie szczegółów użytkownika o id
 router.get("/:id", async (req, res) => {
   try {

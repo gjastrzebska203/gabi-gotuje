@@ -14,12 +14,13 @@ export default function Navigation() {
     <nav>
       <button onClick={() => router.push("/")}>Strona główna</button>
       <button onClick={() => router.push("/recipes")}>Przepisy</button>
+      <button onClick={() => router.push("/users")}>Użytkownicy</button>
       {isLoggedIn ? (
         <>
           <button onClick={() => router.push("/add-recipe")}>
             Dodaj przepis
           </button>
-          <button onClick={() => router.push("/profile")}>Profil</button>
+          <button onClick={() => router.push("/profile")}>Mój profil</button>
           <button onClick={handleLogout}>Wyloguj</button>
         </>
       ) : (
