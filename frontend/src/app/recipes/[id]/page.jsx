@@ -138,6 +138,26 @@ export default function RecipeDetailsPage() {
     }
   };
 
+  const handleDeleteComment = async (commentId) => {
+    // console.log(commentId);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return alert("Musisz być zalogowany, aby usunąć komentarz.");
+    }
+
+    try {
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/comments/${commentId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setComments(comments.filter((comment) => comment._id !== commentId));
+    } catch (err) {
+      setError("Wystąpił błąd podczas usuwania komentarza.");
+    }
+  };
+
   if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
   if (!recipe) return <p>Nie znaleziono przepisu.</p>;
@@ -174,7 +194,8 @@ export default function RecipeDetailsPage() {
         <ul>
           {comments.map((comment) => (
             <li key={comment._id}>
-              <strong>{comment.user_id.username}</strong>:{" "}
+              {/* <strong>{comment.user_id.username}</strong>:{" "} */}
+              <strong>{comment._id}</strong>:{" "}
               {editingCommentId === comment._id ? (
                 <input
                   type="text"
@@ -191,9 +212,14 @@ export default function RecipeDetailsPage() {
                       Zapisz
                     </button>
                   ) : (
-                    <button onClick={() => handleEditComment(comment)}>
-                      Edytuj
-                    </button>
+                    <>
+                      <button onClick={() => handleEditComment(comment)}>
+                        Edytuj
+                      </button>
+                      <button onClick={() => handleDeleteComment(comment._id)}>
+                        Usuń
+                      </button>
+                    </>
                   )}
                 </>
               )}

@@ -62,22 +62,26 @@ router.put("/:id", authenticate, async (req, res) => {
   }
 });
 
-// // usuwanie komentarza
-// router.delete("/:id", async (req, res) => {
-//   try {
-//     const { id } = req.params;
+// usuwanie komentarza
+router.delete("/:id", authenticate, async (req, res) => {
+  try {
+    const comment = await CommentModel.findById(req.params.id);
 
-//     const deletedComment = await CommentModel.findByIdAndDelete(id);
-//     if (!deletedComment) {
-//       return res
-//         .status(404)
-//         .json({ error: "Komentarz o podanym ID nie istnieje" });
-//     }
+    if (!comment) {
+      return res.status(404).json({ error: "Komentarz nie znaleziony" });
+    }
 
-//     res.status(204).send();
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// });
+    if (comment.user_id.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: "Nie masz uprawnień do usunięcia tego komentarza" });
+    }
+
+    await comment.deleteOne();
+    res.json({ message: "Komentarz został usunięty" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 
 module.exports = router;
