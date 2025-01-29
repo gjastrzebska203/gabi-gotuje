@@ -15,6 +15,7 @@ export default function Navigation() {
       <button onClick={() => router.push("/")}>Strona główna</button>
       {isLoggedIn ? (
         <>
+          <button onClick={() => router.push("/recipes")}>Przepisy</button>
           <button onClick={() => router.push("/add-recipe")}>
             Dodaj przepis
           </button>

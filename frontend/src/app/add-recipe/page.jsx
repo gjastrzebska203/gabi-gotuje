@@ -55,6 +55,7 @@ export default function AddRecipePage() {
 
   return (
     <div className="page">
+      <Navigation></Navigation>
       <h2>Dodaj nowy przepis</h2>
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
