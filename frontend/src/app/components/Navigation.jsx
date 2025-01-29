@@ -19,7 +19,7 @@ export default function Navigation() {
           <button onClick={() => router.push("/add-recipe")}>
             Dodaj przepis
           </button>
-          <button onClick={() => router.push("/my-profile")}>Profil</button>
+          <button onClick={() => router.push("/profile")}>Profil</button>
           <button onClick={handleLogout}>Wyloguj</button>
         </>
       ) : (

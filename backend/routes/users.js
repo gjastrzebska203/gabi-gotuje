@@ -85,6 +85,20 @@ router.get("/me", async (req, res) => {
   }
 });
 
+// pobranie szczegółów użytkownika o id
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.id).select("-password");
+    if (!user)
+      return res.status(404).json({ error: "Użytkownik nie znaleziony" });
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// aktualizacja użytkownika
 router.put("/:id", authenticate, async (req, res) => {
   try {
     const { id } = req.params;
@@ -120,6 +134,7 @@ router.put("/:id", authenticate, async (req, res) => {
   }
 });
 
+// usunięcie użytkownika
 router.delete("/:id", authenticate, async (req, res) => {
   try {
     const { id } = req.params;
