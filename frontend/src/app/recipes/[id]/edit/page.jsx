@@ -163,6 +163,15 @@ export default function EditRecipePage() {
             </li>
           ))}
         </ul>
+        <input
+          type="text"
+          placeholder="Dodaj krok"
+          value={stepInput}
+          onChange={(e) => setStepInput(e.target.value)}
+        />
+        <button type="button" onClick={addStep}>
+          Dodaj krok
+        </button>
 
         <input
           type="text"

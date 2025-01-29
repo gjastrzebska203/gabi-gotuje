@@ -85,6 +85,36 @@ router.get("/me", async (req, res) => {
   }
 });
 
+// edycja własnego konta
+router.put("/me", authenticate, async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ error: "Brak tokenu autoryzacyjnego" });
+    }
+    const verified = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await UserModel.findById(verified.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ error: "Użytkownik nie istnieje" });
+    }
+
+    if (username) user.username = username;
+    if (email) user.email = email;
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    await user.save();
+    res.json({ message: "Dane konta zaktualizowane pomyślnie" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // pobranie wszystkich użytkowników
 router.get("/", async (req, res) => {
   try {
@@ -103,42 +133,6 @@ router.get("/:id", async (req, res) => {
       return res.status(404).json({ error: "Użytkownik nie znaleziony" });
 
     res.json(user);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// aktualizacja użytkownika
-router.put("/:id", authenticate, async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { username, email, password } = req.body;
-
-    if (req.user.id !== id) {
-      return res
-        .status(403)
-        .json({ error: "Brak uprawnień do edytowania tego konta" });
-    }
-
-    const updates = {};
-    if (username) updates.username = username;
-    if (email) updates.email = email;
-
-    if (password) {
-      const salt = await bcrypt.genSalt(10);
-      updates.password = await bcrypt.hash(password, salt);
-    }
-
-    const updatedUser = await UserModel.findByIdAndUpdate(id, updates, {
-      new: true,
-    }).select("-password");
-    if (!updatedUser) {
-      return res
-        .status(404)
-        .json({ error: "Użytkownik nie został znaleziony" });
-    }
-
-    res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

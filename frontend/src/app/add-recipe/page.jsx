@@ -117,6 +117,7 @@ export default function AddRecipePage() {
           <button type="submit">Dodaj przepis</button>
         </div>
       </form>
+      <button onClick={() => router.push("/")}>Powrót</button>
     </div>
   );
 }

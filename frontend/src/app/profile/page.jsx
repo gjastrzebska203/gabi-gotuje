@@ -51,7 +51,9 @@ export default function ProfilePage() {
       <p>
         <strong>Rola:</strong> {user.role || "Użytkownik"}
       </p>
-
+      <button onClick={() => router.push("/profile/edit")}>
+        Edytuj profil
+      </button>
       <button onClick={handleLogout}>Wyloguj</button>
     </div>
   );
