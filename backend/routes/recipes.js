@@ -52,6 +52,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// pobieranie przepisu po id
 router.get("/:id", async (req, res) => {
   try {
     const recipe = await RecipeModel.findById(req.params.id);
@@ -64,34 +65,37 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// edycja przepisu
 router.put("/:id", authenticate, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, ingredients, steps, iimage } = req.body;
+    const { title, ingredients, description, steps, image } = req.body;
 
     const recipe = await RecipeModel.findById(id);
     if (!recipe) {
       return res.status(404).json({ error: "Przepis nie został znaleziony" });
     }
 
-    if (recipe.created_by !== req.user.id) {
+    if (recipe.created_by.toString() !== req.user.id) {
       return res
         .status(403)
         .json({ error: "Brak uprawnień do edytowania tego przepisu" });
     }
 
     if (title) recipe.title = title;
+    if (description) recipe.description = description;
     if (ingredients) recipe.ingredients = ingredients;
     if (steps) recipe.steps = steps;
     if (image) recipe.image = image;
 
-    const updatedRecipe = await recipe.save();
-    res.json(updatedRecipe);
+    await recipe.save();
+    res.json(recipe);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
+// usunięcie przepisu
 router.delete("/:id", authenticate, async (req, res) => {
   try {
     const { id } = req.params;

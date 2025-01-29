@@ -24,8 +24,10 @@ export default function Navigation() {
         </>
       ) : (
         <>
-          <button onClick={() => router.push("/register")}>Wyloguj</button>
-          <button onClick={() => router.push("/log-in")}></button>
+          <button onClick={() => router.push("/register")}>
+            Zarejestruj się
+          </button>
+          <button onClick={() => router.push("/log-in")}>Zaloguj się</button>
         </>
       )}
     </nav>

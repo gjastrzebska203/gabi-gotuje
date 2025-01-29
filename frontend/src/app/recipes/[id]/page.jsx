@@ -11,10 +11,9 @@ export default function RecipeDetailsPage() {
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    if (!id) return;
-
     const fetchRecipe = async () => {
       try {
         const response = await axios.get(
@@ -28,7 +27,28 @@ export default function RecipeDetailsPage() {
       }
     };
 
-    fetchRecipe();
+    const getUserId = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/users/me`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        console.log("ID użytkownika:", res.data._id);
+        setUserId(res.data._id);
+      } catch (err) {
+        console.error("Błąd pobierania danych użytkownika", err);
+      }
+    };
+
+    if (id) {
+      fetchRecipe();
+      getUserId();
+    }
   }, [id]);
 
   if (loading) return <p>Ładowanie...</p>;
@@ -60,6 +80,11 @@ export default function RecipeDetailsPage() {
           <li key={index}>{step}</li>
         ))}
       </ul>
+      {userId && recipe.created_by && userId === recipe.created_by && (
+        <button onClick={() => router.push(`/recipes/${recipe._id}/edit`)}>
+          Edytuj
+        </button>
+      )}
       <button onClick={() => router.push("/recipes")}>Powrót do listy</button>
     </div>
   );
