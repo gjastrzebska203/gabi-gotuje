@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import { set } from "react-hook-form";
 
 export default function RecipeDetailsPage() {
   const router = useRouter();
@@ -41,7 +42,7 @@ export default function RecipeDetailsPage() {
         console.log("ID użytkownika:", res.data._id);
         setUserId(res.data._id);
       } catch (err) {
-        console.error("Błąd pobierania danych użytkownika", err);
+        setError("Błąd pobierania danych użytkownika");
       }
     };
 
@@ -50,6 +51,20 @@ export default function RecipeDetailsPage() {
       getUserId();
     }
   }, [id]);
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/recipes/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      router.push("/recipes");
+    } catch (err) {
+      setError("Wystąpił błąd podczas usuwania przepisu.");
+    }
+  };
 
   if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
@@ -81,9 +96,12 @@ export default function RecipeDetailsPage() {
         ))}
       </ul>
       {userId && recipe.created_by && userId === recipe.created_by && (
-        <button onClick={() => router.push(`/recipes/${recipe._id}/edit`)}>
-          Edytuj
-        </button>
+        <>
+          <button onClick={() => router.push(`/recipes/${recipe._id}/edit`)}>
+            Edytuj
+          </button>
+          <button onClick={handleDelete}>Usuń</button>
+        </>
       )}
       <button onClick={() => router.push("/recipes")}>Powrót do listy</button>
     </div>
