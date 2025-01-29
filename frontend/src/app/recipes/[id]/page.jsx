@@ -4,17 +4,20 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
-import { set } from "react-hook-form";
 
 export default function RecipeDetailsPage() {
   const router = useRouter();
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
+    if (!id) return;
+
     const fetchRecipe = async () => {
       try {
         const response = await axios.get(
@@ -25,6 +28,17 @@ export default function RecipeDetailsPage() {
         setError("Nie udało się pobrać szczegółów przepisu.");
       } finally {
         setLoading(false);
+      }
+    };
+
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/comments/${id}`
+        );
+        setComments(response.data);
+      } catch (err) {
+        setError("Błąd pobierania komentarzy");
       }
     };
 
@@ -48,6 +62,7 @@ export default function RecipeDetailsPage() {
 
     if (id) {
       fetchRecipe();
+      fetchComments();
       getUserId();
     }
   }, [id]);
@@ -63,6 +78,30 @@ export default function RecipeDetailsPage() {
       router.push("/recipes");
     } catch (err) {
       setError("Wystąpił błąd podczas usuwania przepisu.");
+    }
+  };
+
+  const handleAddComment = async () => {
+    if (!commentText.trim()) return;
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return alert("Musisz być zalogowany, aby dodać komentarz.");
+    }
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/comments`,
+        { recipe_id: id, text: commentText },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setComments([...comments, response.data]);
+      setCommentText("");
+      window.location.reload();
+    } catch (err) {
+      console.log({ error: err.message });
+      setError("Wystąpił błąd podczas dodawania komentarza.");
     }
   };
 
@@ -95,6 +134,28 @@ export default function RecipeDetailsPage() {
           <li key={index}>{step}</li>
         ))}
       </ul>
+      <h3>Komentarze</h3>
+      {comments.length === 0 ? (
+        <p>Brak komentarzy. Bądź pierwszy!</p>
+      ) : (
+        <ul>
+          {comments.map((comment) => (
+            <li key={comment._id}>
+              <strong>{comment.user_id.username}</strong>: {comment.text}
+            </li>
+          ))}
+        </ul>
+      )}
+      {userId && (
+        <div>
+          <textarea
+            placeholder="Dodaj komentarz..."
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+          />
+          <button onClick={handleAddComment}>Dodaj komentarz</button>
+        </div>
+      )}
       {userId && recipe.created_by && userId === recipe.created_by && (
         <>
           <button onClick={() => router.push(`/recipes/${recipe._id}/edit`)}>
