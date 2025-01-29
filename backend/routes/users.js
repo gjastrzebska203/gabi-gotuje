@@ -139,24 +139,15 @@ router.get("/:id", async (req, res) => {
 });
 
 // usunięcie użytkownika
-router.delete("/:id", authenticate, async (req, res) => {
+router.delete("/me", authenticate, async (req, res) => {
   try {
-    const { id } = req.params;
-
-    if (req.user.id !== id) {
-      return res
-        .status(403)
-        .json({ error: "Brak uprawnień do usunięcia tego konta" });
+    const user = await UserModel.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: "Użytkownik nie znaleziony" });
     }
 
-    const deletedUser = await UserModel.findByIdAndDelete(id);
-    if (!deletedUser) {
-      return res
-        .status(404)
-        .json({ error: "Użytkownik nie został znaleziony" });
-    }
-
-    res.status(204).send();
+    await user.deleteOne();
+    res.status(204).json({ message: "Konto zostało usunięte" });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

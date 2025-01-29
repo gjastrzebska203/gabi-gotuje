@@ -57,6 +57,24 @@ export default function EditProfilePage() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return setError("Musisz być zalogowany, aby usunąć konto.");
+    }
+
+    try {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/users/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      localStorage.removeItem("token");
+      router.push("/");
+    } catch (err) {
+      setError("Wystąpił błąd podczas usuwania konta.");
+    }
+  };
+
   return (
     <div className="page">
       <h2>Edytuj profil</h2>
@@ -85,6 +103,7 @@ export default function EditProfilePage() {
         <button type="submit">Zapisz zmiany</button>
       </form>
       <button onClick={() => router.push("/profile")}>Powrót</button>
+      <button onClick={handleDeleteAccount}>Usuń konto</button>
     </div>
   );
 }
