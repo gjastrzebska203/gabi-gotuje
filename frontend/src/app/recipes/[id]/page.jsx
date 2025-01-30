@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import { io } from "socket.io-client";
 
 export default function RecipeDetailsPage() {
   const router = useRouter();
@@ -17,7 +18,12 @@ export default function RecipeDetailsPage() {
   const [userRating, setUserRating] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState("");
+  const [socket, setSocket] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [username, setUsername] = useState("Anonim");
+  const [userCount, setUserCount] = useState(0);
 
   useEffect(() => {
     if (!id) return;
@@ -68,7 +74,7 @@ export default function RecipeDetailsPage() {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("ID użytkownika:", res.data._id);
+        setUsername(res.data.username);
         setUserId(res.data._id);
       } catch (err) {
         setError("Błąd pobierania danych użytkownika");
@@ -82,6 +88,35 @@ export default function RecipeDetailsPage() {
       getUserId();
     }
   }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const newSocket = io("http://localhost:3001");
+    setSocket(newSocket);
+
+    newSocket.emit("join", { username, recipeId: id });
+
+    newSocket.on("message", (msg) => {
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    });
+
+    newSocket.on("userCount", ({ count }) => {
+      console.log("Aktualna liczba użytkowników:", count);
+      setUserCount(count);
+    });
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [id, username]);
+
+  const sendMessage = () => {
+    if (message.trim() && socket) {
+      socket.emit("sendMessage", message);
+      setMessage("");
+    }
+  };
 
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
@@ -326,6 +361,31 @@ export default function RecipeDetailsPage() {
           <button onClick={handleDelete}>Usuń</button>
         </>
       )}
+
+      <h3>Czat na żywo</h3>
+      <div>
+        {messages.map((msg, index) => (
+          <p key={index}>
+            <strong>{msg.user}:</strong> {msg.text}
+          </p>
+        ))}
+      </div>
+      {userId ? (
+        <div>
+          <input
+            type="text"
+            placeholder="Napisz wiadomość..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <button onClick={sendMessage} style={{ marginLeft: "10px" }}>
+            Wyślij
+          </button>
+        </div>
+      ) : (
+        <p>Musisz być zalogowany, aby pisać na czacie.</p>
+      )}
+      <h3>Użytkownicy online: {userCount}</h3>
       <button onClick={() => router.push("/recipes")}>Powrót do listy</button>
     </div>
   );

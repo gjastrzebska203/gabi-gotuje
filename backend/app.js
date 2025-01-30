@@ -17,6 +17,8 @@ const io = new Server(httpServer, {
 app.use(express.json());
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 
+const roomUsers = {};
+
 io.on("connection", (socket) => {
   console.log("Nowe połączenie:", socket.id);
 
@@ -25,6 +27,11 @@ io.on("connection", (socket) => {
     socket.join(room);
     socket.username = username;
     socket.room = room;
+
+    if (!roomUsers[room]) roomUsers[room] = 0;
+    roomUsers[room]++;
+
+    io.to(room).emit("userCount", { count: roomUsers[room] });
 
     socket.to(room).emit("message", {
       user: "system",
@@ -44,12 +51,20 @@ io.on("connection", (socket) => {
 
   socket.on("disconnect", () => {
     if (socket.room) {
+      roomUsers[socket.room] = Math.max((roomUsers[socket.room] || 1) - 1, 0);
+      io.to(socket.room).emit("userCount", { count: roomUsers[socket.room] });
+
       socket.to(socket.room).emit("message", {
         user: "system",
         text: `${socket.username} opuścił czat.`,
       });
+
+      console.log(
+        `${socket.username} opuścił pokój: ${socket.room}. Użytkownicy: ${
+          roomUsers[socket.room]
+        }`
+      );
     }
-    console.log(`Użytkownik ${socket.username} (${socket.id}) się rozłączył.`);
   });
 });
 
@@ -63,5 +78,5 @@ app.use("/api", routes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Serwer działa na porcie ${PORT}`));
 httpServer.listen(3001, () => {
-  console.log(`Serwer WebSocket działa na porcie ${PORT}`);
+  console.log(`Serwer WebSocket działa na porcie 3001`);
 });
