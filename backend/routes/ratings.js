@@ -10,29 +10,21 @@ router.post("/", authenticate, async (req, res) => {
   try {
     const { recipe_id, rating } = req.body;
 
-    if (!recipe_id || !rating) {
+    if (!recipe_id || rating < 1 || rating > 5) {
       return res
         .status(400)
-        .json({ error: "Pola recipe_id i rating są wymagane" });
+        .json({ error: "Nieprawidłowa ocena (1-5) lub brak ID przepisu" });
     }
 
-    if (rating < 1 || rating > 5) {
-      return res
-        .status(400)
-        .json({ error: "Ocena musi być w przedziale od 1 do 5" });
-    }
-
-    const recipe = await RecipeModel.findById(recipe_id);
-    if (!recipe) {
-      return res.status(400).json({ error: "Przepis nie został znaleziony" });
-    }
-
-    const existingRating = await RatingModel.findOne({
-      recipe_id,
+    let userRating = await RatingModel.findOne({
       user_id: req.user.id,
+      recipe_id,
     });
-    if (existingRating) {
-      return res.status(400).json({ error: "Już oceniono ten przepis" });
+
+    if (userRating) {
+      userRating.rating = rating;
+      await userRating.save();
+      return res.json(userRating);
     }
 
     const newRating = new RatingModel({
@@ -40,85 +32,58 @@ router.post("/", authenticate, async (req, res) => {
       recipe_id,
       rating,
     });
-
     await newRating.save();
     res.status(201).json(newRating);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Błąd serwera" });
   }
 });
 
 // pobranie średniej oceny
 router.get("/average/:recipe_id", async (req, res) => {
   try {
-    const { recipe_id } = req.params;
+    const ratings = await RatingModel.find({ recipe_id: req.params.recipe_id });
 
-    const recipe = await RecipeModel.findById(recipe_id);
-    if (!recipe) {
-      return res.status(404).json({ error: "Przepis nie został znaleziony" });
+    if (ratings.length === 0) {
+      return res.json({ average: 0, count: 0 });
     }
 
-    const ratings = await RatingModel.aggregate([
-      { $match: { recipe_id: mongoose.Types.ObjectId(recipe_id) } },
-      { $group: { _id: "$recipe_id", averageRating: { $avg: "$rating" } } },
-    ]);
-
-    const averageRating = ratings.length > 0 ? ratings[0].averageRating : 0;
-
-    res.json({ recipe_id, averageRating });
-  } catch {
-    res.status(500).json({ error: err.message });
+    const sum = ratings.reduce((acc, r) => acc + r.rating, 0);
+    const average = sum / ratings.length;
+    res.json({ average: average.toFixed(1), count: ratings.length });
+  } catch (err) {
+    res.status(500).json({ error: "Błąd serwera" });
   }
 });
 
-// aktualizacja oceny
-router.put(":/id", authenticate, async (req, res) => {
+// pobranie oceny użytkownika
+router.get("/:recipe_id", authenticate, async (req, res) => {
   try {
-    const { rating } = req.body;
+    const rating = await RatingModel.findOne({
+      user_id: req.user.id,
+      recipe_id: req.params.recipe_id,
+    });
 
-    if (!rating || rating < 1 || rating > 5) {
-      return res
-        .status(400)
-        .json({ error: "Ocena musi być w przedziale od 1 do 5" });
+    if (!rating) {
+      return res.json({ rating: null });
     }
 
-    const existingRating = await RatingModel.findOne(req.params.id);
-    if (!existingRating) {
-      return res
-        .status(404)
-        .json({ error: "Ocena nie została znaleziona lub brak uprawnień" });
-    }
-
-    if (existingRating.user_id.toString() !== req.user.id) {
-      return res.status(403).json({ error: "Nie możesz edytować tej oceny" });
-    }
-
-    existingRating.rating = rating;
-    await existingRating.save();
-
-    res.json(existingRating);
+    res.json(rating);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Błąd serwera" });
   }
 });
 
 // usunięcie oceny
-router.delete("/:id", authenticate, async (req, res) => {
+router.delete("/:recipe_id", authenticate, async (req, res) => {
   try {
-    const userRating = await RatingModel.findById(req.params.id);
-
-    if (!userRating) {
-      return res.status(404).json({ error: "Ocena nie została znaleziona" });
-    }
-
-    if (userRating.user_id.toString() !== req.user.id) {
-      return res.status(403).json({ error: "Nie możesz usunąć tej oceny" });
-    }
-
-    await userRating.deleteOne();
-    res.status(204).json({ message: "Ocena została usunięta" });
+    await RatingModel.findOneAndDelete({
+      user_id: req.user.id,
+      recipe_id: req.params.recipe_id,
+    });
+    res.json({ message: "Ocena została usunięta" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: "Błąd serwera" });
   }
 });
 

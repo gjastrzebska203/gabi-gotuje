@@ -13,10 +13,11 @@ export default function RecipeDetailsPage() {
   const [commentText, setCommentText] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editText, setEditText] = useState("");
+  const [averageRating, setAverageRating] = useState(null);
+  const [userRating, setUserRating] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userId, setUserId] = useState(null);
-  const [username, setUsername] = useState(null);
 
   useEffect(() => {
     if (!id) return;
@@ -45,6 +46,17 @@ export default function RecipeDetailsPage() {
       }
     };
 
+    const fetchRatings = async () => {
+      try {
+        const avgRes = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/ratings/average/${id}`
+        );
+        setAverageRating(avgRes.data.average);
+      } catch (err) {
+        console.error("Błąd pobierania średniej oceny:", err);
+      }
+    };
+
     const getUserId = async () => {
       const token = localStorage.getItem("token");
       if (!token) return;
@@ -58,7 +70,6 @@ export default function RecipeDetailsPage() {
         );
         console.log("ID użytkownika:", res.data._id);
         setUserId(res.data._id);
-        setUsername(res.data.username);
       } catch (err) {
         setError("Błąd pobierania danych użytkownika");
       }
@@ -66,6 +77,7 @@ export default function RecipeDetailsPage() {
 
     if (id) {
       fetchRecipe();
+      fetchRatings();
       fetchComments();
       getUserId();
     }
@@ -157,6 +169,26 @@ export default function RecipeDetailsPage() {
     }
   };
 
+  const handleRating = async (rating) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      return alert("Musisz być zalogowany, aby ocenić przepis.");
+    }
+
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/ratings`,
+        { recipe_id: id, rating },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setUserRating(rating);
+      setAverageRating((prev) => ((prev * 4 + rating) / 5).toFixed(1));
+    } catch (err) {
+      alert("Błąd podczas dodawania oceny.");
+    }
+  };
+
   if (loading) return <p>Ładowanie...</p>;
   if (error) return <p>{error}</p>;
   if (!recipe) return <p>Nie znaleziono przepisu.</p>;
@@ -186,6 +218,26 @@ export default function RecipeDetailsPage() {
           <li key={index}>{step}</li>
         ))}
       </ul>
+      <h3>Oceny:</h3>
+      <p>
+        <strong>Średnia ocena:</strong> {averageRating || "Brak ocen"}
+      </p>
+      {userId && (
+        <div>
+          <p>
+            <strong>Twoja ocena:</strong> {userRating || "Nie oceniono"}
+          </p>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              onClick={() => handleRating(star)}
+              style={{ color: star <= userRating ? "gold" : "gray" }}
+            >
+              ★
+            </button>
+          ))}
+        </div>
+      )}
       <h3>Komentarze</h3>
       {comments.length === 0 ? (
         <p>Brak komentarzy. Bądź pierwszy!</p>
