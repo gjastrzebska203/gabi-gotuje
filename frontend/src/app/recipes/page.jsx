@@ -3,11 +3,11 @@ import Navigation from "../components/Navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { Router } from "next/router";
 
 export default function RecipesPage() {
   const router = useRouter();
   const [recipes, setRecipes] = useState([]);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -15,7 +15,10 @@ export default function RecipesPage() {
     const fetchRecipes = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/recipes`
+          `${process.env.NEXT_PUBLIC_API_URL}/recipes`,
+          {
+            params: search ? { search } : {},
+          }
         );
         setRecipes(response.data);
       } catch (err) {
@@ -26,26 +29,37 @@ export default function RecipesPage() {
     };
 
     fetchRecipes();
-  }, []);
-
-  if (loading) return <p>Ładowanie przepisów...</p>;
-  if (error) return <p>{error}</p>;
+  }, [search]);
 
   return (
     <div className="page">
       <Navigation></Navigation>
       <h2>Lista przepisów</h2>
-      <ul>
-        {recipes.map((recipe, index) => (
-          <li key={recipe._id}>
-            <h3>{recipe.title}</h3>
-            <p>{recipe.description}</p>
-            <button onClick={() => router.push(`/recipes/${recipe._id}`)}>
-              Zobacz więcej
-            </button>
-          </li>
-        ))}
-      </ul>
+      <input
+        type="text"
+        placeholder="Wyszukaj przepis..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+      {loading ? (
+        <p>Ładowanie...</p>
+      ) : error ? (
+        <p style={{ color: "red" }}>{error}</p>
+      ) : recipes.length === 0 ? (
+        <p>Brak wyników dla "{search}".</p>
+      ) : (
+        <ul>
+          {recipes.map((recipe) => (
+            <li key={recipe._id}>
+              <h3>{recipe.title}</h3>
+              <p>{recipe.description.substring(0, 100)}...</p>
+              <button onClick={() => router.push(`/recipes/${recipe._id}`)}>
+                Zobacz więcej
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
