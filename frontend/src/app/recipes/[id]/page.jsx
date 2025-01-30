@@ -2,6 +2,7 @@
 import Navigation from "@/app/components/Navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import { io } from "socket.io-client";
@@ -84,6 +85,15 @@ export default function RecipeDetailsPage() {
 
     if (id) {
       fetchRecipe();
+      const viewedRecipes = Cookies.get("viewedRecipes");
+      let viewedArray = viewedRecipes ? JSON.parse(viewedRecipes) : [];
+      if (!viewedArray.includes(id)) {
+        viewedArray.unshift(id);
+        if (viewedArray.length > 5) viewedArray.pop();
+        Cookies.set("viewedRecipes", JSON.stringify(viewedArray), {
+          expires: 7,
+        });
+      }
       fetchRatings();
       fetchComments();
       getUserId();
