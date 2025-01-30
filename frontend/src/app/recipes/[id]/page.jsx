@@ -24,6 +24,7 @@ export default function RecipeDetailsPage() {
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState("Anonim");
   const [userCount, setUserCount] = useState(0);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     if (!id) return;
@@ -106,6 +107,10 @@ export default function RecipeDetailsPage() {
       setUserCount(count);
     });
 
+    newSocket.on("notification", (notif) => {
+      setNotifications((prev) => [...prev, notif]);
+    });
+
     return () => {
       newSocket.disconnect();
     };
@@ -149,7 +154,15 @@ export default function RecipeDetailsPage() {
 
       setComments([...comments, response.data]);
       setCommentText("");
-      window.location.reload();
+      // window.location.reload();
+
+      if (socket) {
+        socket.emit("newComment", {
+          recipe_id: id,
+          username,
+          text: commentText,
+        });
+      }
     } catch (err) {
       console.log({ error: err.message });
       setError("Wystąpił błąd podczas dodawania komentarza.");
@@ -224,6 +237,14 @@ export default function RecipeDetailsPage() {
 
       setUserRating(rating);
       setAverageRating((prev) => ((prev * 4 + rating) / 5).toFixed(1));
+
+      if (socket) {
+        socket.emit("newRating", {
+          recipe_id: id,
+          username,
+          rating,
+        });
+      }
     } catch (err) {
       alert("Błąd podczas dodawania oceny.");
     }
@@ -254,6 +275,16 @@ export default function RecipeDetailsPage() {
   return (
     <div className="page">
       <Navigation></Navigation>
+      <h3>Powiadomienia</h3>
+      <div>
+        {notifications.length === 0 ? (
+          <p>Brak nowych powiadomień.</p>
+        ) : (
+          notifications.map((notif, index) => (
+            <p key={index}>{notif.message}</p>
+          ))
+        )}
+      </div>
       <h2>{recipe.title}</h2>
       <img
         src={recipe.image || "/no-image.jpg"}
@@ -295,12 +326,7 @@ export default function RecipeDetailsPage() {
             </button>
           ))}
           {userRating && (
-            <button
-              onClick={handleDeleteRating}
-              style={{ marginLeft: "10px", color: "red" }}
-            >
-              Usuń ocenę
-            </button>
+            <button onClick={handleDeleteRating}>Usuń ocenę</button>
           )}
         </div>
       )}

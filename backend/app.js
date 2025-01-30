@@ -49,6 +49,28 @@ io.on("connection", (socket) => {
     }
   });
 
+  // powiadomienia
+  socket.on("newComment", (comment) => {
+    io.to(`recipe_${comment.recipe_id}`).emit("notification", {
+      type: "comment",
+      message: `Nowy komentarz od ${comment.username}: "${comment.text}"`,
+    });
+  });
+
+  socket.on("newRating", (rating) => {
+    io.to(`recipe_${rating.recipe_id}`).emit("notification", {
+      type: "rating",
+      message: `${rating.username} ocenił przepis na ${rating.rating} gwiazdek!`,
+    });
+  });
+
+  socket.on("newMessage", (message) => {
+    io.to(`recipe_${message.recipe_id}`).emit("notification", {
+      type: "message",
+      message: `Nowa wiadomość od ${message.username}`,
+    });
+  });
+
   socket.on("disconnect", () => {
     if (socket.room) {
       roomUsers[socket.room] = Math.max((roomUsers[socket.room] || 1) - 1, 0);
