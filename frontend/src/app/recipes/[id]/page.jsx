@@ -172,20 +172,43 @@ export default function RecipeDetailsPage() {
   const handleRating = async (rating) => {
     const token = localStorage.getItem("token");
     if (!token) {
-      return alert("Musisz być zalogowany, aby ocenić przepis.");
+      setError("Musisz być zalogowany, aby ocenić przepis.");
     }
 
     try {
-      await axios.post(
+      const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/ratings`,
         { recipe_id: id, rating },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
 
       setUserRating(rating);
       setAverageRating((prev) => ((prev * 4 + rating) / 5).toFixed(1));
     } catch (err) {
       alert("Błąd podczas dodawania oceny.");
+    }
+  };
+
+  const handleDeleteRating = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.log("Musisz być zalogowany, aby usunąć ocenę.");
+    }
+
+    try {
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/ratings/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setUserRating(null);
+      fetchRatings();
+    } catch (err) {
+      console.log("Błąd podczas usuwania oceny.");
     }
   };
 
@@ -236,6 +259,14 @@ export default function RecipeDetailsPage() {
               ★
             </button>
           ))}
+          {userRating && (
+            <button
+              onClick={handleDeleteRating}
+              style={{ marginLeft: "10px", color: "red" }}
+            >
+              Usuń ocenę
+            </button>
+          )}
         </div>
       )}
       <h3>Komentarze</h3>

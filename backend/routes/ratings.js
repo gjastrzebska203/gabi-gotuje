@@ -9,7 +9,6 @@ const router = express.Router();
 router.post("/", authenticate, async (req, res) => {
   try {
     const { recipe_id, rating } = req.body;
-
     if (!recipe_id || rating < 1 || rating > 5) {
       return res
         .status(400)
@@ -22,6 +21,7 @@ router.post("/", authenticate, async (req, res) => {
     });
 
     if (userRating) {
+      console.log("🔄 Aktualizacja oceny:", userRating);
       userRating.rating = rating;
       await userRating.save();
       return res.json(userRating);
@@ -33,6 +33,7 @@ router.post("/", authenticate, async (req, res) => {
       rating,
     });
     await newRating.save();
+
     res.status(201).json(newRating);
   } catch (err) {
     res.status(500).json({ error: "Błąd serwera" });
