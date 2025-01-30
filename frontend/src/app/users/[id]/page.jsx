@@ -3,9 +3,11 @@ import Navigation from "@/app/components/Navigation";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function UserProfilePage() {
   const { id } = useParams();
+  const router = useRouter();
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
 

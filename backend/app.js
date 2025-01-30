@@ -1,5 +1,6 @@
 "use strict";
 const express = require("express");
+const { logMessage } = require("./utils/sshLogger");
 const http = require("http");
 const { Server } = require("socket.io");
 const cors = require("cors");
@@ -90,6 +91,11 @@ io.on("connection", (socket) => {
   });
 });
 
+app.get("/", (req, res) => {
+  logMessage("Użytkownik odwiedził stronę główną.");
+  res.send("Witaj w aplikacji!");
+});
+
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("Połączono z bazą danych MongoDB Atlas"))
@@ -98,7 +104,10 @@ mongoose
 app.use("/api", routes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Serwer działa na porcie ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Serwer działa na porcie ${PORT}`);
+  logMessage("Serwer uruchomiony na porcie " + PORT);
+});
 httpServer.listen(3001, () => {
   console.log(`Serwer WebSocket działa na porcie 3001`);
 });
