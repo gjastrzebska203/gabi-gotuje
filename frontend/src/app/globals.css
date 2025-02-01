@@ -39,6 +39,9 @@ nav {
   display: flex;
   justify-content: space-between;
 }
+nav div {
+  box-shadow: none;
+}
 nav div.image {
   width: 30%;
   display: flex;
