@@ -55,7 +55,6 @@ img#font {
   height: 50px;
 }
 img.page {
-  width: 40%;
   height: 100%;
   -o-object-fit: cover;
      object-fit: cover;
@@ -71,4 +70,93 @@ button:hover {
   background-color: #c89785;
   color: #fcf7ec;
   border: 1px solid #fcf7ec;
+}
+
+div.log-page {
+  height: 100%;
+  display: flex;
+}
+
+div.log-sign {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+div.log-sign-inner {
+  background-color: #b37f6f;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 36px;
+  border-radius: 16px;
+}
+div.log-sign-inner h2 {
+  color: #fcf7ec;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0px 20px 20px 20px;
+}
+div.log-sign-inner div.inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-shadow: none;
+}
+div.log-sign-inner div.inputs > input {
+  margin: 8px 0;
+  width: 100%;
+  max-width: 300px;
+  padding: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #fcf7ec;
+  border-radius: 16px;
+  outline: none;
+  transition: 0.3s;
+}
+div.log-sign-inner div.inputs > input:focus {
+  border: 1px solid #e5b29f;
+}
+
+div#no-account {
+  padding: 16px;
+  height: 64px;
+  border-radius: 12px;
+  background-color: #e5b29f;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+div#no-account > p {
+  color: #fcf7ec;
+}
+
+button#log-in {
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+p.error {
+  color: #fcf7ec;
+  margin-top: 16px;
+}
+
+@media (max-width: 768px) {
+  .page {
+    flex-direction: column;
+  }
+  .page img {
+    width: 100%;
+    height: 40vh;
+  }
+  .log-sign {
+    width: 100%;
+    padding: 20px;
+  }
+  .inputs input {
+    width: 100%;
+  }
 }/*# sourceMappingURL=globals.css.map */

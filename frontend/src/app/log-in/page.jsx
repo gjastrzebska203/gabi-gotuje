@@ -23,10 +23,10 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="page">
+    <div className="log-page">
       <img
         className="page"
-        src="https://liliebakery.fr/wp-content/uploads/2024/03/cookies-moelleux-recette-lilie-bakery.jpg"
+        src="https://static01.nyt.com/images/2024/08/30/multimedia/VV-Chewy-Brownie-Cookiesrex-gcmh/VV-Chewy-Brownie-Cookiesrex-gcmh-mediumSquareAt3X.jpg"
         alt="cookies"
       />
       <div className="log-sign">
