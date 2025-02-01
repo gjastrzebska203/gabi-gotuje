@@ -4,11 +4,25 @@
   margin: 0;
   padding: 0;
   font-size: 12px;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
   height: 100vh;
   background-color: $body-color;
+}
+
+div.layout {
+  height: 100%;
+}
+
+div.page {
+  border: 1px solid red;
+  height: 100%;
+}
+
+div {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 button {
@@ -20,11 +34,6 @@ button {
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
-}
-
-div.page {
-  border: 1px solid red;
-  height: 100%;
 }
 
 nav {
@@ -43,20 +52,28 @@ nav {
     justify-content: space-around;
     align-items: center;
     width: 70%;
-    button {
-      background-color: $body-color;
-      color: $font-color;
-      border: 1px solid $font-color;
-      &:hover {
-        cursor: pointer;
-        background-color: $font-color;
-        color: $body-color;
-        border: 1px solid $font-color;
-      }
-    }
   }
 }
 
-img#font {
-  height: 50px;
+img {
+  &#font {
+    height: 50px;
+  }
+  &.page {
+    width: 40%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+button {
+  background-color: $body-color;
+  color: $font-color;
+  border: 1px solid $font-color;
+  &:hover {
+    cursor: pointer;
+    background-color: $button-hover-color;
+    color: $body-color;
+    border: 1px solid $body-color;
+  }
 }

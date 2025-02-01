@@ -2,11 +2,25 @@
   margin: 0;
   padding: 0;
   font-size: 12px;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
   height: 100vh;
   background-color: #fcf7ec;
+}
+
+div.layout {
+  height: 100%;
+}
+
+div.page {
+  border: 1px solid red;
+  height: 100%;
+}
+
+div {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 button {
@@ -18,11 +32,6 @@ button {
 button:hover {
   cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-div.page {
-  border: 1px solid red;
-  height: 100%;
 }
 
 nav {
@@ -41,18 +50,25 @@ nav div.buttons {
   align-items: center;
   width: 70%;
 }
-nav div.buttons button {
+
+img#font {
+  height: 50px;
+}
+img.page {
+  width: 40%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+button {
   background-color: #fcf7ec;
   color: #b37f6f;
   border: 1px solid #b37f6f;
 }
-nav div.buttons button:hover {
+button:hover {
   cursor: pointer;
-  background-color: #b37f6f;
+  background-color: #c89785;
   color: #fcf7ec;
-  border: 1px solid #b37f6f;
-}
-
-img#font {
-  height: 50px;
+  border: 1px solid #fcf7ec;
 }/*# sourceMappingURL=globals.css.map */
