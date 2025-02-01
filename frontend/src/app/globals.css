@@ -15,7 +15,7 @@ div.layout {
 }
 
 div.page {
-  border: 1px solid red;
+  border: 2px solid red;
   height: 100%;
 }
 
@@ -56,6 +56,9 @@ nav div.buttons {
 
 img#font {
   height: 50px;
+}
+img#logo {
+  height: 400px;
 }
 img.page {
   height: 100%;
@@ -102,6 +105,26 @@ div.log-sign-inner h2 {
   font-weight: bold;
   margin: 0px 20px 20px 20px;
 }
+div.log-sign-inner div#no-account {
+  padding: 16px;
+  height: 64px;
+  border-radius: 12px;
+  background-color: #e5b29f;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+div.log-sign-inner div#no-account > p {
+  color: #fcf7ec;
+}
+div.log-sign-inner button#log-in {
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+div.log-sign-inner p.error {
+  color: #fcf7ec;
+  margin-top: 16px;
+}
 div.log-sign-inner div.inputs {
   display: flex;
   flex-direction: column;
@@ -124,27 +147,13 @@ div.log-sign-inner div.inputs > input:focus {
   border: 1px solid #e5b29f;
 }
 
-div#no-account {
-  padding: 16px;
-  height: 64px;
-  border-radius: 12px;
-  background-color: #e5b29f;
+div.content {
+  border: 2px solid red;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-}
-div#no-account > p {
-  color: #fcf7ec;
-}
-
-button#log-in {
-  margin-top: 8px;
-  margin-bottom: 16px;
-}
-
-p.error {
-  color: #fcf7ec;
-  margin-top: 16px;
+  justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 768px) {

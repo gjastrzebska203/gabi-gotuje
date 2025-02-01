@@ -34,22 +34,24 @@ export default function HomePage() {
   return (
     <div className="page">
       <Navigation></Navigation>
-      <h3>Gabi gotuje</h3>
-      <h2>Ostatnio oglądane przepisy</h2>
-      {recentRecipes.length === 0 ? (
-        <p>Nie oglądałeś jeszcze żadnych przepisów.</p>
-      ) : (
-        <ul>
-          {recentRecipes.map((recipe) => (
-            <button
-              key={recipe._id}
-              onClick={() => router.push(`/recipes/${recipe._id}`)}
-            >
-              {recipe.title}
-            </button>
-          ))}
-        </ul>
-      )}
+      <div className="content">
+        <img id="logo" src="/logo.png" alt="" />
+        <h2>Ostatnio oglądane przepisy</h2>
+        {recentRecipes.length === 0 ? (
+          <p>Nie oglądałeś jeszcze żadnych przepisów.</p>
+        ) : (
+          <ul>
+            {recentRecipes.map((recipe) => (
+              <button
+                key={recipe._id}
+                onClick={() => router.push(`/recipes/${recipe._id}`)}
+              >
+                {recipe.title}
+              </button>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }

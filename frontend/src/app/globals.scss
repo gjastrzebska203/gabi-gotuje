@@ -17,7 +17,7 @@ div.layout {
 }
 
 div.page {
-  border: 1px solid red;
+  border: 2px solid red;
   height: 100%;
 }
 
@@ -58,9 +58,14 @@ nav {
   }
 }
 
+//
+// obrazy
 img {
   &#font {
     height: 50px;
+  }
+  &#logo {
+    height: 400px;
   }
   &.page {
     height: 100%;
@@ -109,6 +114,26 @@ div.log-sign-inner {
     font-weight: bold;
     margin: 0px 20px 20px 20px;
   }
+  & div#no-account {
+    padding: 16px;
+    height: 64px;
+    border-radius: 12px;
+    background-color: $item-color;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    & > p {
+      color: $body-color;
+    }
+  }
+  & button#log-in {
+    margin-top: 8px;
+    margin-bottom: 16px;
+  }
+  & p.error {
+    color: $body-color;
+    margin-top: 16px;
+  }
   & div.inputs {
     display: flex;
     flex-direction: column;
@@ -132,32 +157,19 @@ div.log-sign-inner {
   }
 }
 
-div#no-account {
-  padding: 16px;
-  height: 64px;
-  border-radius: 12px;
-  background-color: $item-color;
+//
+// strona główna
+div.content {
+  border: 2px solid red;
+  box-shadow: none;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-  & > p {
-    color: $body-color;
-  }
-}
-
-button#log-in {
-  margin-top: 8px;
-  margin-bottom: 16px;
-}
-
-p.error {
-  color: $body-color;
-  margin-top: 16px;
+  justify-content: center;
+  align-items: center;
 }
 
 //
 // responsywaność
-
 @media (max-width: 768px) {
   .page {
     flex-direction: column;
