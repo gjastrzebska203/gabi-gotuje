@@ -1,5 +1,5 @@
 "use client";
-import { use, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
@@ -54,7 +54,7 @@ export default function AddRecipePage() {
   };
 
   return (
-    <div className="page">
+    <div className="page" id="add-recipe-page">
       <h2>Dodaj nowy przepis</h2>
       {error && <p>{error}</p>}
       <form onSubmit={handleSubmit}>
@@ -90,7 +90,7 @@ export default function AddRecipePage() {
           </ul>
 
           {/* kroki */}
-          <div>
+          <div id="steps">
             <input
               type="text"
               placeholder="Dodaj krok"

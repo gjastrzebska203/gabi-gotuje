@@ -239,4 +239,60 @@ div.content > div.grid#user-grid > div {
   border-radius: 16px;
   display: grid;
   grid-template-rows: repeat(2, 1fr);
+}
+
+div#add-recipe-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+div#add-recipe-page > form {
+  background-color: #e5b29f;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  margin: 16px;
+}
+div#add-recipe-page > form input {
+  color: #fcf7ec;
+  background-color: #e5b29f;
+  outline: none;
+  border: 1px solid #b37f6f;
+  padding: 8px;
+  border-radius: 8px;
+}
+div#add-recipe-page > form input:focus {
+  border: 1px solid #fcf7ec;
+}
+div#add-recipe-page > form input::-moz-placeholder {
+  color: #b37f6f;
+}
+div#add-recipe-page > form input::placeholder {
+  color: #b37f6f;
+}
+div#add-recipe-page > form textarea {
+  color: #fcf7ec;
+  background-color: #e5b29f;
+  outline: none;
+  border: 1px solid #b37f6f;
+  padding: 8px;
+  margin: 12px 0;
+  border-radius: 8px;
+}
+div#add-recipe-page > form textarea:focus {
+  border: 1px solid #fcf7ec;
+}
+div#add-recipe-page > form textarea::-moz-placeholder {
+  color: #b37f6f;
+}
+div#add-recipe-page > form textarea::placeholder {
+  color: #b37f6f;
+}
+div#add-recipe-page > form div#steps {
+  margin: 12px 0px;
+}
+div#add-recipe-page > form div > input {
+  margin-right: 8px;
 }/*# sourceMappingURL=globals.css.map */

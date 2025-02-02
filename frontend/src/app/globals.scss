@@ -258,3 +258,57 @@ div.content {
     }
   }
 }
+
+//
+// add recipe
+div#add-recipe-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  & > form {
+    background-color: $item-color;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    margin: 16px;
+    & input {
+      color: $body-color;
+      background-color: $item-color;
+      outline: none;
+      border: 1px solid $font-color;
+      padding: 8px;
+      border-radius: 8px;
+      &:focus {
+        border: 1px solid $body-color;
+      }
+      &::placeholder {
+        color: $font-color;
+      }
+    }
+    & textarea {
+      color: $body-color;
+      background-color: $item-color;
+      outline: none;
+      border: 1px solid $font-color;
+      padding: 8px;
+      margin: 12px 0;
+      border-radius: 8px;
+      &:focus {
+        border: 1px solid $body-color;
+      }
+      &::placeholder {
+        color: $font-color;
+      }
+    }
+    div#steps {
+      margin: 12px 0px;
+    }
+    div {
+      & > input {
+        margin-right: 8px;
+      }
+    }
+  }
+}
