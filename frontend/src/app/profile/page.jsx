@@ -36,7 +36,7 @@ export default function ProfilePage() {
     router.push("/log-in");
   };
 
-  if (error) return <p>{error}</p>;
+  if (error) return <p className="error">{error}</p>;
   if (!user) return <p className="loading">Ładowanie...</p>;
 
   return (

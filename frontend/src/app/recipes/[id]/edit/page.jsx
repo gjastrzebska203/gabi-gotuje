@@ -100,7 +100,7 @@ export default function EditRecipePage() {
   };
 
   if (loading) return <p className="loading">Ładowanie...</p>;
-  if (error) return <p>{error}</p>;
+  if (error) return <p className="error">{error}</p>;
 
   return (
     <div className="page" id="add-recipe-page">

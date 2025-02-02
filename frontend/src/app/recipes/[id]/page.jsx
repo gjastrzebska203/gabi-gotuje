@@ -278,9 +278,9 @@ export default function RecipeDetailsPage() {
     }
   };
 
-  if (loading) return <p id="loading">Ładowanie...</p>;
-  if (error) return <p>{error}</p>;
-  if (!recipe) return <p>Nie znaleziono przepisu.</p>;
+  if (loading) return <p className="loading">Ładowanie...</p>;
+  if (error) return <p className="error">{error}</p>;
+  if (!recipe) return <p className="error">Nie znaleziono przepisu.</p>;
 
   return (
     <div id="recipe-page" className="page">

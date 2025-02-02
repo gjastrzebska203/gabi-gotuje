@@ -49,7 +49,7 @@ export default function RegisterPage() {
                 {...register("password", { required: true })}
               />
             </div>
-            {error && <p>{error}</p>}
+            {error && <p className="error">{error}</p>}
             <button id="log-in" type="submit">
               Zarejestruj się
             </button>

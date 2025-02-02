@@ -39,8 +39,8 @@ export default function UserProfilePage() {
     fetchUserRecipes();
   }, [id]);
 
-  if (error) return <p>{error}</p>;
-  if (!user) return <p>Ładowanie...</p>;
+  if (error) return <p className="error">{error}</p>;
+  if (!user) return <p className="loading">Ładowanie...</p>;
 
   return (
     <div className="page" id="user-page">

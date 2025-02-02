@@ -77,8 +77,8 @@ export default function EditProfilePage() {
   return (
     <div className="page" id="add-recipe-page">
       <h2>Edytuj profil</h2>
-      {error && <p>{error}</p>}
-      {success && <p>{success}</p>}
+      {error && <p className="error">{error}</p>}
+      {success && <p className="error">{success}</p>}
 
       <form id="edit-profile" onSubmit={handleSubmit}>
         <input
