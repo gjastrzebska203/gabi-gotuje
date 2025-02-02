@@ -3,11 +3,9 @@ import Navigation from "@/app/components/Navigation";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 
 export default function UserProfilePage() {
   const { id } = useParams();
-  const router = useRouter();
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
 
@@ -32,17 +30,22 @@ export default function UserProfilePage() {
   if (!user) return <p>Ładowanie...</p>;
 
   return (
-    <div className="page">
-      <h2>Profil użytkownika</h2>
-      <p>
-        <strong>Nazwa użytkownika:</strong> {user.username}
-      </p>
-      <p>
-        <strong>Email:</strong> {user.email}
-      </p>
-      <p>
-        <strong>Rola:</strong> {user.role || "Użytkownik"}
-      </p>
+    <div className="page" id="user-page">
+      <Navigation></Navigation>
+      <div className="content">
+        <div id="user-info">
+          <h2>Profil użytkownika</h2>
+          <p>
+            <strong>Nazwa użytkownika:</strong> {user.username}
+          </p>
+          <p>
+            <strong>Email:</strong> {user.email}
+          </p>
+          <p>
+            <strong>Rola:</strong> {user.role || "Użytkownik"}
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

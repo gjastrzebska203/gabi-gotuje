@@ -441,4 +441,18 @@ div#recipe-page > div.content > div#edit-del {
   display: flex;
   justify-content: space-around;
   margin-bottom: 16px;
+}
+
+div#user-page > div.content {
+  color: #9a6a5c;
+  border-radius: 16px;
+  padding: 16px;
+}
+div#user-page > div.content > div#user-info {
+  background-color: #e5b29f;
+  padding: 16px;
+  border-radius: 16px;
+}
+div#user-page > div.content h2 {
+  color: #9a6a5c;
 }/*# sourceMappingURL=globals.css.map */

@@ -464,3 +464,21 @@ div#recipe-page {
     }
   }
 }
+
+//
+// user page
+div#user-page {
+  & > div.content {
+    color: $dark-font-color;
+    border-radius: 16px;
+    padding: 16px;
+    & > div#user-info {
+      background-color: $item-color;
+      padding: 16px;
+      border-radius: 16px;
+    }
+    & h2 {
+      color: $dark-font-color;
+    }
+  }
+}
