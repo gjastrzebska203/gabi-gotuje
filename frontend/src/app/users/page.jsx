@@ -27,7 +27,7 @@ export default function UsersPage() {
     fetchUsers();
   }, []);
 
-  if (loading) return <p>Ładowanie użytkowników...</p>;
+  if (loading) return <p id="loading">Ładowanie użytkowników...</p>;
   if (error) return <p>{error}</p>;
 
   return (

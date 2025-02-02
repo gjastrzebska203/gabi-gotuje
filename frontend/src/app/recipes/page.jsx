@@ -46,7 +46,7 @@ export default function RecipesPage() {
         </div>
         <div className="grid">
           {loading ? (
-            <p>Ładowanie...</p>
+            <p className="loading">Ładowanie...</p>
           ) : error ? (
             <p className="error">{error}</p>
           ) : recipes.length === 0 ? (

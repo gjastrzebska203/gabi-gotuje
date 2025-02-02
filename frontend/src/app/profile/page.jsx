@@ -37,7 +37,7 @@ export default function ProfilePage() {
   };
 
   if (error) return <p>{error}</p>;
-  if (!user) return <p>Ładowanie...</p>;
+  if (!user) return <p className="loading">Ładowanie...</p>;
 
   return (
     <div className="page" id="user-page">

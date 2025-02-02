@@ -519,4 +519,8 @@ div#user-page > div.content > div#user-recipes > div#recipes > div#recipe-item >
 }
 div#user-page > div.content button {
   margin: 16px;
+}
+
+p#loading {
+  color: #b37f6f;
 }/*# sourceMappingURL=globals.css.map */
