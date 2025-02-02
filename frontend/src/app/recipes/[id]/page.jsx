@@ -283,146 +283,169 @@ export default function RecipeDetailsPage() {
   if (!recipe) return <p>Nie znaleziono przepisu.</p>;
 
   return (
-    <div className="page">
+    <div id="recipe-page" className="page">
       <Navigation></Navigation>
-      <h3>Powiadomienia</h3>
-      <div>
-        {notifications.length === 0 ? (
-          <p>Brak nowych powiadomień.</p>
-        ) : (
-          notifications.map((notif, index) => (
-            <p key={index}>{notif.message}</p>
-          ))
-        )}
-      </div>
-      <h2>{recipe.title}</h2>
-      <img
-        src={recipe.image || "/no-image.jpg"}
-        alt={recipe.title}
-        style={{ height: "140px" }}
-      />
-      <p>
-        <strong>Opis:</strong>
-        {recipe.description || "Brak opisu"}
-      </p>
-      <h3>Składniki:</h3>
-      <ul>
-        {recipe.ingredients.map((item, index) => (
-          <li key={index}>{item}</li>
-        ))}
-      </ul>
-      <h3>Przygotowanie:</h3>
-      <ul>
-        {recipe.steps.map((step, index) => (
-          <li key={index}>{step}</li>
-        ))}
-      </ul>
-      <h3>Oceny:</h3>
-      <p>
-        <strong>Średnia ocena:</strong> {averageRating || "Brak ocen"}
-      </p>
-      {userId && (
-        <div>
-          <p>
-            <strong>Twoja ocena:</strong> {userRating || "Nie oceniono"}
-          </p>
-          {[1, 2, 3, 4, 5].map((star) => (
-            <button
-              key={star}
-              onClick={() => handleRating(star)}
-              style={{ color: star <= userRating ? "gold" : "gray" }}
-            >
-              ★
+      <div className="content">
+        <div id="notifications">
+          <h3>Powiadomienia dla przepisu</h3>
+          <div>
+            {notifications.length === 0 ? (
+              <p>Brak nowych powiadomień.</p>
+            ) : (
+              notifications.map((notif, index) => (
+                <p key={index}>{notif.message}</p>
+              ))
+            )}
+          </div>
+        </div>
+
+        <h2>{recipe.title}</h2>
+        <img
+          className="page"
+          src={recipe.image || "/no-image.jpg"}
+          alt={recipe.title}
+        />
+        <p id="description">
+          <strong>Opis: </strong>
+          {recipe.description || "Brak opisu"}
+        </p>
+        <div id="ingr">
+          <h3>Składniki:</h3>
+          <ul>
+            {recipe.ingredients.map((item, index) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+        <div id="steps">
+          <h3>Przygotowanie:</h3>
+          <ol>
+            {recipe.steps.map((step, index) => (
+              <li key={index}>{step}</li>
+            ))}
+          </ol>
+        </div>
+        <div id="ratings">
+          <strong>Średnia ocena:</strong> {averageRating || "Brak ocen"}
+        </div>
+        {userId && recipe.created_by && userId === recipe.created_by && (
+          <div id="edit-del">
+            <button onClick={() => router.push(`/recipes/${recipe._id}/edit`)}>
+              Edytuj
             </button>
-          ))}
-          {userRating && (
-            <button onClick={handleDeleteRating}>Usuń ocenę</button>
+            <button onClick={handleDelete}>Usuń</button>
+          </div>
+        )}
+        <div id="comments">
+          <h3>Komentarze</h3>
+          {comments.length === 0 ? (
+            <p id="comment-item">Brak komentarzy. Bądź pierwszy!</p>
+          ) : (
+            comments.map((comment) => (
+              <div id="comment-item" key={comment._id}>
+                <strong>{comment.user_id.username || username}</strong>:{" "}
+                {editingCommentId === comment._id ? (
+                  <input
+                    type="text"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
+                ) : (
+                  comment.text
+                )}
+                {userId === comment.user_id._id && (
+                  <>
+                    {editingCommentId === comment._id ? (
+                      <button onClick={() => handleUpdateComment(comment._id)}>
+                        Zapisz
+                      </button>
+                    ) : (
+                      <>
+                        <button onClick={() => handleEditComment(comment)}>
+                          Edytuj
+                        </button>
+                        <button
+                          onClick={() => handleDeleteComment(comment._id)}
+                        >
+                          Usuń
+                        </button>
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
+            ))
           )}
         </div>
-      )}
-      <h3>Komentarze</h3>
-      {comments.length === 0 ? (
-        <p>Brak komentarzy. Bądź pierwszy!</p>
-      ) : (
-        <ul>
-          {comments.map((comment) => (
-            <li key={comment._id}>
-              <strong>{comment.user_id.username}</strong>:{" "}
-              {editingCommentId === comment._id ? (
-                <input
-                  type="text"
-                  value={editText}
-                  onChange={(e) => setEditText(e.target.value)}
-                />
-              ) : (
-                comment.text
-              )}
-              {userId === comment.user_id._id && (
-                <>
-                  {editingCommentId === comment._id ? (
-                    <button onClick={() => handleUpdateComment(comment._id)}>
-                      Zapisz
-                    </button>
-                  ) : (
-                    <>
-                      <button onClick={() => handleEditComment(comment)}>
-                        Edytuj
-                      </button>
-                      <button onClick={() => handleDeleteComment(comment._id)}>
-                        Usuń
-                      </button>
-                    </>
-                  )}
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
-      {userId && (
-        <div>
-          <textarea
-            placeholder="Dodaj komentarz..."
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-          />
-          <button onClick={handleAddComment}>Dodaj komentarz</button>
-        </div>
-      )}
-      {userId && recipe.created_by && userId === recipe.created_by && (
-        <>
-          <button onClick={() => router.push(`/recipes/${recipe._id}/edit`)}>
-            Edytuj
-          </button>
-          <button onClick={handleDelete}>Usuń</button>
-        </>
-      )}
+        {userId && (
+          <div id="new-rating">
+            <p>
+              <strong>Twoja ocena:</strong> {userRating || "Nie oceniono"}
+            </p>
+            <div>
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  onClick={() => handleRating(star)}
+                  style={{
+                    color: star <= userRating ? "gold" : "gray",
+                    border: "none",
+                    boxShadow: "none",
+                    padding: "4px",
+                    fontSize: "24px",
+                  }}
+                >
+                  ★
+                </button>
+              ))}
+            </div>
+            {userRating && (
+              <button onClick={handleDeleteRating}>Usuń ocenę</button>
+            )}
+          </div>
+        )}
 
-      <h3>Czat na żywo</h3>
-      <div>
-        {messages.map((msg, index) => (
-          <p key={index}>
-            <strong>{msg.user}:</strong> {msg.text}
-          </p>
-        ))}
-      </div>
-      {userId ? (
-        <div>
-          <input
-            type="text"
-            placeholder="Napisz wiadomość..."
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button onClick={sendMessage} style={{ marginLeft: "10px" }}>
-            Wyślij
-          </button>
+        {userId && (
+          <div id="new-comment">
+            <input
+              placeholder="Dodaj komentarz..."
+              value={commentText}
+              onChange={(e) => setCommentText(e.target.value)}
+            />
+            <button onClick={handleAddComment}>Dodaj komentarz</button>
+          </div>
+        )}
+
+        <div id="chat">
+          <h3>Czat na żywo</h3>
+          <div>
+            {messages.map((msg, index) => (
+              <p key={index}>
+                <strong>{msg.user}:</strong> {msg.text}
+              </p>
+            ))}
+          </div>
+          {userId ? (
+            <div>
+              <input
+                type="text"
+                placeholder="Napisz wiadomość..."
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+              />
+              <button onClick={sendMessage} style={{ marginLeft: "10px" }}>
+                Wyślij
+              </button>
+            </div>
+          ) : (
+            <p>Musisz być zalogowany, aby pisać na czacie.</p>
+          )}
         </div>
-      ) : (
-        <p>Musisz być zalogowany, aby pisać na czacie.</p>
-      )}
-      <h3>Użytkownicy online: {userCount}</h3>
-      <button onClick={() => router.push("/recipes")}>Powrót do listy</button>
+        <h3 id="users-online">Użytkownicy online: {userCount}</h3>
+        <button id="go-back" onClick={() => router.push("/recipes")}>
+          Powrót do listy
+        </button>
+      </div>
     </div>
   );
 }

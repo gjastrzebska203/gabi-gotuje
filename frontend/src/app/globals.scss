@@ -17,7 +17,7 @@ div.layout {
 }
 
 div.page {
-  border: 2px solid red;
+  // border: 2px solid red;
   height: 100%;
 }
 
@@ -152,6 +152,7 @@ div.log-sign-inner {
       transition: 0.3s;
       &:focus {
         border: 1px solid $item-color;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
       }
     }
   }
@@ -212,12 +213,14 @@ div.content {
       background-color: $body-color;
       border: 1px solid $font-color;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
       outline: none;
       &::placeholder {
         color: $font-color;
       }
       &:focus {
         border: 1px solid $item-color;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
       }
     }
   }
@@ -285,8 +288,10 @@ div#add-recipe-page {
       border: 1px solid $font-color;
       padding: 8px;
       border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       &:focus {
         border: 1px solid $body-color;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
       }
       &::placeholder {
         color: $font-color;
@@ -314,6 +319,148 @@ div#add-recipe-page {
       & > input {
         margin-right: 8px;
       }
+    }
+  }
+}
+
+//
+// recipe page
+div#recipe-page {
+  & > div.content {
+    border-top: 1px solid $font-color;
+    padding-bottom: 16px;
+    display: grid;
+    grid-template-areas:
+      "title  picture"
+      "description  picture"
+      "ingredients  picture"
+      "steps picture"
+      "ratings picture"
+      "edit picture"
+      "comments comments"
+      "new-rating new-comment"
+      "chat notifications"
+      "online go-back";
+    column-gap: 16px;
+    row-gap: 16px;
+    & > div#notifications {
+      grid-area: notifications;
+    }
+    & > h2 {
+      grid-area: title;
+      background-color: $item-color;
+      border-radius: 16px;
+      padding: 16px 0 16px 32px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    & > img {
+      height: 500px;
+      grid-area: picture;
+    }
+    & > p#description {
+      grid-area: description;
+      background-color: $item-color;
+      border-radius: 16px;
+      padding: 16px 0 16px 32px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    & > div#ingr {
+      grid-area: ingredients;
+      background-color: $item-color;
+      border-radius: 16px;
+      padding: 16px 0 16px 32px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    & > div#steps {
+      grid-area: steps;
+      background-color: $item-color;
+      border-radius: 16px;
+      padding: 16px 0 16px 32px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    & > div#ratings {
+      grid-area: ratings;
+    }
+    & > div#comments {
+      grid-area: comments;
+      & > #comment-item {
+        padding: 16px;
+        background-color: $item-color;
+        border-radius: 16px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 10px 0;
+      }
+    }
+    & > div#new-comment {
+      grid-area: new-comment;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      & > input {
+        color: $font-color;
+        margin: 8px 0;
+        background-color: $body-color;
+        width: 60%;
+        max-width: 300px;
+        padding: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid $font-color;
+        border-radius: 16px;
+        outline: none;
+        transition: 0.3s;
+        &:focus {
+          border: 1px solid $item-color;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        &::placeholder {
+          color: $font-color;
+        }
+      }
+    }
+    & > div#new-rating {
+      grid-area: new-rating;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      & button:hover {
+        background-color: $body-color;
+      }
+    }
+    & > h3#users-online {
+      grid-area: online;
+    }
+    & > button#go-back {
+      grid-area: go-back;
+    }
+    & > div#chat {
+      grid-area: chat;
+      & input {
+        color: $font-color;
+        margin: 8px 0;
+        background-color: $body-color;
+        width: 60%;
+        max-width: 300px;
+        padding: 12px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        border: 1px solid $font-color;
+        border-radius: 16px;
+        outline: none;
+        transition: 0.3s;
+        &:focus {
+          border: 1px solid $item-color;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        &::placeholder {
+          color: $font-color;
+        }
+      }
+    }
+    & > div#edit-del {
+      grid-area: edit;
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 16px;
     }
   }
 }
