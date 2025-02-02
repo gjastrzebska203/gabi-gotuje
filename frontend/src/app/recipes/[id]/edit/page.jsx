@@ -103,8 +103,7 @@ export default function EditRecipePage() {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="page">
-      <Navigation></Navigation>
+    <div className="page" id="add-recipe-page">
       <h2>Edytuj przepis</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -122,58 +121,63 @@ export default function EditRecipePage() {
         ></textarea>
 
         {/* edycja składników */}
-        <h3>Składniki</h3>
-        <ul>
-          {ingredients.map((ingredient, index) => (
-            <li key={index}>
-              <input
-                type="text"
-                value={ingredient}
-                onChange={(e) => editIngredient(index, e.target.value)}
-              />
-              <button type="button" onClick={() => removeIngredient(index)}>
-                Usuń
-              </button>
-            </li>
-          ))}
-        </ul>
-        <input
-          type="text"
-          placeholder="Dodaj składnik"
-          value={ingredientInput}
-          onChange={(e) => setIngredientInput(e.target.value)}
-        />
-        <button type="button" onClick={addIngredient}>
-          Dodaj składnik
-        </button>
+        <div>
+          <h3>Składniki</h3>
+          <ul>
+            {ingredients.map((ingredient, index) => (
+              <li key={index}>
+                <input
+                  type="text"
+                  value={ingredient}
+                  onChange={(e) => editIngredient(index, e.target.value)}
+                />
+                <button type="button" onClick={() => removeIngredient(index)}>
+                  Usuń
+                </button>
+              </li>
+            ))}
+          </ul>
+          <input
+            type="text"
+            placeholder="Dodaj składnik"
+            value={ingredientInput}
+            onChange={(e) => setIngredientInput(e.target.value)}
+          />
+          <button type="button" onClick={addIngredient}>
+            Dodaj składnik
+          </button>
+        </div>
 
         {/* edycja kroków */}
-        <h3>Kroki przygotowania</h3>
-        <ul>
-          {steps.map((step, index) => (
-            <li key={index}>
-              <input
-                type="text"
-                value={step}
-                onChange={(e) => editStep(index, e.target.value)}
-              />
-              <button type="button" onClick={() => removeStep(index)}>
-                Usuń
-              </button>
-            </li>
-          ))}
-        </ul>
-        <input
-          type="text"
-          placeholder="Dodaj krok"
-          value={stepInput}
-          onChange={(e) => setStepInput(e.target.value)}
-        />
-        <button type="button" onClick={addStep}>
-          Dodaj krok
-        </button>
+        <div>
+          <h3>Kroki przygotowania</h3>
+          <ul>
+            {steps.map((step, index) => (
+              <li key={index}>
+                <input
+                  type="text"
+                  value={step}
+                  onChange={(e) => editStep(index, e.target.value)}
+                />
+                <button type="button" onClick={() => removeStep(index)}>
+                  Usuń
+                </button>
+              </li>
+            ))}
+          </ul>
+          <input
+            type="text"
+            placeholder="Dodaj krok"
+            value={stepInput}
+            onChange={(e) => setStepInput(e.target.value)}
+          />
+          <button type="button" onClick={addStep}>
+            Dodaj krok
+          </button>
+        </div>
 
         <input
+          id="margin"
           type="text"
           placeholder="Link do zdjęcia"
           value={image}

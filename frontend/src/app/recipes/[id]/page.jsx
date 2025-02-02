@@ -343,36 +343,42 @@ export default function RecipeDetailsPage() {
           ) : (
             comments.map((comment) => (
               <div id="comment-item" key={comment._id}>
-                <strong>{comment.user_id.username || username}</strong>:{" "}
-                {editingCommentId === comment._id ? (
-                  <input
-                    type="text"
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                  />
-                ) : (
-                  comment.text
-                )}
-                {userId === comment.user_id._id && (
-                  <>
-                    {editingCommentId === comment._id ? (
-                      <button onClick={() => handleUpdateComment(comment._id)}>
-                        Zapisz
-                      </button>
-                    ) : (
-                      <>
-                        <button onClick={() => handleEditComment(comment)}>
-                          Edytuj
-                        </button>
+                <div>
+                  <strong>{comment.user_id.username || username}</strong>:{" "}
+                  {editingCommentId === comment._id ? (
+                    <input
+                      type="text"
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                    />
+                  ) : (
+                    comment.text
+                  )}
+                </div>
+                <div>
+                  {userId === comment.user_id._id && (
+                    <>
+                      {editingCommentId === comment._id ? (
                         <button
-                          onClick={() => handleDeleteComment(comment._id)}
+                          onClick={() => handleUpdateComment(comment._id)}
                         >
-                          Usuń
+                          Zapisz
                         </button>
-                      </>
-                    )}
-                  </>
-                )}
+                      ) : (
+                        <>
+                          <button onClick={() => handleEditComment(comment)}>
+                            Edytuj
+                          </button>
+                          <button
+                            onClick={() => handleDeleteComment(comment._id)}
+                          >
+                            Usuń
+                          </button>
+                        </>
+                      )}
+                    </>
+                  )}
+                </div>
               </div>
             ))
           )}

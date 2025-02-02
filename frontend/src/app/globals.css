@@ -260,8 +260,13 @@ div#add-recipe-page {
   align-items: center;
   justify-content: center;
 }
+div#add-recipe-page h3 {
+  color: #fcf7ec;
+  margin-top: 8px;
+}
 div#add-recipe-page > form {
   background-color: #e5b29f;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 16px;
   display: flex;
   flex-direction: column;
@@ -276,6 +281,9 @@ div#add-recipe-page > form input {
   padding: 8px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+div#add-recipe-page > form input#margin {
+  margin: 8px 0;
 }
 div#add-recipe-page > form input:focus {
   border: 1px solid #fcf7ec;
@@ -293,11 +301,13 @@ div#add-recipe-page > form textarea {
   outline: none;
   border: 1px solid #b37f6f;
   padding: 8px;
-  margin: 12px 0;
+  margin-top: 12px;
   border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 div#add-recipe-page > form textarea:focus {
   border: 1px solid #fcf7ec;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 div#add-recipe-page > form textarea::-moz-placeholder {
   color: #b37f6f;
@@ -310,6 +320,14 @@ div#add-recipe-page > form div#steps {
 }
 div#add-recipe-page > form div > input {
   margin-right: 8px;
+  margin-top: 8px;
+}
+div#add-recipe-page > form ul {
+  color: #fcf7ec;
+}
+div#add-recipe-page > form ul > li > input {
+  margin-right: 8px;
+  margin-top: 8px;
 }
 
 div#recipe-page > div.content {
@@ -368,6 +386,12 @@ div#recipe-page > div.content > div#comments > #comment-item {
   border-radius: 16px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin: 10px 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+div#recipe-page > div.content > div#comments > #comment-item button {
+  margin: 0 16px;
 }
 div#recipe-page > div.content > div#new-comment {
   grid-area: new-comment;

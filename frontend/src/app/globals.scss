@@ -278,8 +278,13 @@ div#add-recipe-page {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  h3 {
+    color: $body-color;
+    margin-top: 8px;
+  }
   & > form {
     background-color: $item-color;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 16px;
     display: flex;
     flex-direction: column;
@@ -293,6 +298,9 @@ div#add-recipe-page {
       padding: 8px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      &#margin {
+        margin: 8px 0;
+      }
       &:focus {
         border: 1px solid $body-color;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
@@ -307,10 +315,12 @@ div#add-recipe-page {
       outline: none;
       border: 1px solid $font-color;
       padding: 8px;
-      margin: 12px 0;
+      margin-top: 12px;
       border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       &:focus {
         border: 1px solid $body-color;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
       }
       &::placeholder {
         color: $font-color;
@@ -322,6 +332,16 @@ div#add-recipe-page {
     div {
       & > input {
         margin-right: 8px;
+        margin-top: 8px;
+      }
+    }
+    ul {
+      color: $body-color;
+      & > li {
+        & > input {
+          margin-right: 8px;
+          margin-top: 8px;
+        }
       }
     }
   }
@@ -393,6 +413,12 @@ div#recipe-page {
         border-radius: 16px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         margin: 10px 0;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        & button {
+          margin: 0 16px;
+        }
       }
     }
     & > div#new-comment {
