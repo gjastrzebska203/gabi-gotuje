@@ -33,17 +33,19 @@ export default function UsersPage() {
   return (
     <div className="page">
       <Navigation></Navigation>
-      <h2>Lista użytkowników</h2>
-      <ul>
-        {users.map((user) => (
-          <li key={user._id}>
-            {user.username}
-            <button onClick={() => router.push(`/users/${user._id}`)}>
-              Zobacz więcej
-            </button>
-          </li>
-        ))}
-      </ul>
+      <div className="content">
+        <h2>Lista użytkowników</h2>
+        <div className="grid" id="user-grid">
+          {users.map((user) => (
+            <div className="grid-item" key={user._id}>
+              {user.username}
+              <button onClick={() => router.push(`/users/${user._id}`)}>
+                Zobacz więcej
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
