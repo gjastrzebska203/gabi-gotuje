@@ -1,5 +1,4 @@
 "use client";
-import Navigation from "@/app/components/Navigation";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
@@ -76,12 +75,12 @@ export default function EditProfilePage() {
   };
 
   return (
-    <div className="page">
+    <div className="page" id="add-recipe-page">
       <h2>Edytuj profil</h2>
       {error && <p>{error}</p>}
       {success && <p>{success}</p>}
 
-      <form onSubmit={handleSubmit}>
+      <form id="edit-profile" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Nowa nazwa użytkownika"
@@ -103,7 +102,9 @@ export default function EditProfilePage() {
         <button type="submit">Zapisz zmiany</button>
       </form>
       <button onClick={() => router.push("/profile")}>Powrót</button>
-      <button onClick={handleDeleteAccount}>Usuń konto</button>
+      <button id="second" onClick={handleDeleteAccount}>
+        Usuń konto
+      </button>
     </div>
   );
 }

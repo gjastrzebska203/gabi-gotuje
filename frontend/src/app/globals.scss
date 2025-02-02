@@ -290,6 +290,16 @@ div#add-recipe-page {
     flex-direction: column;
     padding: 16px;
     margin: 16px;
+    &#edit-profile {
+      & > input {
+        &:nth-child(2) {
+          margin: 8px 0;
+        }
+      }
+      & > button {
+        margin-top: 8px;
+      }
+    }
     & input {
       color: $body-color;
       background-color: $item-color;
@@ -316,6 +326,7 @@ div#add-recipe-page {
       border: 1px solid $font-color;
       padding: 8px;
       margin-top: 12px;
+      margin-bottom: 8px;
       border-radius: 8px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       &:focus {
@@ -344,6 +355,9 @@ div#add-recipe-page {
         }
       }
     }
+  }
+  button#second {
+    margin: 8px 0;
   }
 }
 

@@ -273,6 +273,12 @@ div#add-recipe-page > form {
   padding: 16px;
   margin: 16px;
 }
+div#add-recipe-page > form#edit-profile > input:nth-child(2) {
+  margin: 8px 0;
+}
+div#add-recipe-page > form#edit-profile > button {
+  margin-top: 8px;
+}
 div#add-recipe-page > form input {
   color: #fcf7ec;
   background-color: #e5b29f;
@@ -302,6 +308,7 @@ div#add-recipe-page > form textarea {
   border: 1px solid #b37f6f;
   padding: 8px;
   margin-top: 12px;
+  margin-bottom: 8px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -328,6 +335,9 @@ div#add-recipe-page > form ul {
 div#add-recipe-page > form ul > li > input {
   margin-right: 8px;
   margin-top: 8px;
+}
+div#add-recipe-page button#second {
+  margin: 8px 0;
 }
 
 div#recipe-page > div.content {
