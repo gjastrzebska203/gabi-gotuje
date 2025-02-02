@@ -526,7 +526,7 @@ div#user-page {
     }
     & > div#user-recipes {
       text-align: center;
-      margin: 16px 0;
+      margin: 8px 0;
       & > div#recipes {
         margin: 8px 0;
         display: grid;
@@ -554,6 +554,35 @@ div#user-page {
 
 //
 // ładowanie
-p#loading {
+p.loading {
   color: $font-color;
+}
+
+p.error {
+  color: $font-color;
+}
+
+//
+// czat z użytkownikiem
+div#chat-page {
+  & > input {
+    color: $font-color;
+    margin: 8px 0;
+    background-color: $body-color;
+    width: 60%;
+    max-width: 300px;
+    padding: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid $font-color;
+    border-radius: 16px;
+    outline: none;
+    transition: 0.3s;
+    &:focus {
+      border: 1px solid $item-color;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+    &::placeholder {
+      color: $font-color;
+    }
+  }
 }

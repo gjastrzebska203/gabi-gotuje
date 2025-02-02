@@ -496,7 +496,7 @@ div#user-page > div.content h2 {
 }
 div#user-page > div.content > div#user-recipes {
   text-align: center;
-  margin: 16px 0;
+  margin: 8px 0;
 }
 div#user-page > div.content > div#user-recipes > div#recipes {
   margin: 8px 0;
@@ -521,6 +521,34 @@ div#user-page > div.content button {
   margin: 16px;
 }
 
-p#loading {
+p.loading {
+  color: #b37f6f;
+}
+
+p.error {
+  color: #b37f6f;
+}
+
+div#chat-page > input {
+  color: #b37f6f;
+  margin: 8px 0;
+  background-color: #fcf7ec;
+  width: 60%;
+  max-width: 300px;
+  padding: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #b37f6f;
+  border-radius: 16px;
+  outline: none;
+  transition: 0.3s;
+}
+div#chat-page > input:focus {
+  border: 1px solid #e5b29f;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+div#chat-page > input::-moz-placeholder {
+  color: #b37f6f;
+}
+div#chat-page > input::placeholder {
   color: #b37f6f;
 }/*# sourceMappingURL=globals.css.map */

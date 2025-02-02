@@ -72,6 +72,25 @@ io.on("connection", (socket) => {
     });
   });
 
+  // prywatny czat
+  socket.on("joinPrivateChat", ({ userId, recipientId }) => {
+    const room = [userId, recipientId].sort().join("_");
+    socket.join(room);
+    socket.room = room;
+    socket.username = userId;
+    console.log(`Użytkownik ${userId} dołączył do pokoju: ${room}`);
+  });
+
+  socket.on("sendPrivateMessage", ({ senderId, recipientId, message }) => {
+    const room = [senderId, recipientId].sort().join("_");
+    io.to(room).emit("privateMessage", {
+      senderId,
+      message,
+      timestamp: new Date().toISOString(),
+    });
+    console.log(`Nowa wiadomość od ${senderId} do ${recipientId}: ${message}`);
+  });
+
   socket.on("disconnect", () => {
     if (socket.room) {
       roomUsers[socket.room] = Math.max((roomUsers[socket.room] || 1) - 1, 0);
@@ -87,6 +106,10 @@ io.on("connection", (socket) => {
           roomUsers[socket.room]
         }`
       );
+    }
+    if (socket.privateRoom) {
+      console.log(`Użytkownik ${socket.id} rozłączony`);
+      socket.leave(socket.privateRoom);
     }
   });
 });

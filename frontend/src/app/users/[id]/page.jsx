@@ -3,12 +3,14 @@ import Navigation from "@/app/components/Navigation";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function UserProfilePage() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
   const [recipes, setRecipes] = useState([]);
   const [error, setError] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     if (!id) return;
@@ -58,6 +60,9 @@ export default function UserProfilePage() {
             <strong>Rola:</strong> {user.role || "Użytkownik"}
           </p>
         </div>
+        <button onClick={() => router.push(`/users/${id}/message`)}>
+          Wyślij wiadomość
+        </button>
         <div id="user-recipes">
           <h3>Przepisy użytkownika:</h3>
           {recipes.length === 0 ? (
