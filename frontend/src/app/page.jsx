@@ -40,7 +40,7 @@ export default function HomePage() {
         {recentRecipes.length === 0 ? (
           <p>Nie oglądałeś jeszcze żadnych przepisów.</p>
         ) : (
-          <ul>
+          <div id="last-recipes">
             {recentRecipes.map((recipe) => (
               <button
                 key={recipe._id}
@@ -49,7 +49,7 @@ export default function HomePage() {
                 {recipe.title}
               </button>
             ))}
-          </ul>
+          </div>
         )}
       </div>
     </div>

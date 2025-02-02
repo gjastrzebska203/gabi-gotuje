@@ -160,12 +160,17 @@ div.log-sign-inner {
 //
 // strona główna
 div.content {
-  // border: 2px solid red;
-  box-shadow: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  & > div#last-recipes {
+    margin: 8px;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    column-gap: 16px;
+    row-gap: 16px;
+  }
 }
 
 //

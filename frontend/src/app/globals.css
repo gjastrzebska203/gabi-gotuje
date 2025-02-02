@@ -147,11 +147,18 @@ div.log-sign-inner div.inputs > input:focus {
 }
 
 div.content {
-  box-shadow: none;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+div.content > div#last-recipes {
+  margin: 8px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  -moz-column-gap: 16px;
+       column-gap: 16px;
+  row-gap: 16px;
 }
 
 @media (max-width: 768px) {
