@@ -40,21 +40,28 @@ export default function ProfilePage() {
   if (!user) return <p>Ładowanie...</p>;
 
   return (
-    <div className="page">
-      <h2>Twój profil</h2>
-      <p>
-        <strong>Nazwa użytkownika:</strong> {user.username}
-      </p>
-      <p>
-        <strong>Email:</strong> {user.email}
-      </p>
-      <p>
-        <strong>Rola:</strong> {user.role || "Użytkownik"}
-      </p>
-      <button onClick={() => router.push("/profile/edit")}>
-        Edytuj profil
-      </button>
-      <button onClick={handleLogout}>Wyloguj</button>
+    <div className="page" id="user-page">
+      <Navigation></Navigation>
+      <div className="content">
+        <div id="user-info">
+          <h2>Twój profil</h2>
+          <p>
+            <strong>Nazwa użytkownika:</strong> {user.username}
+          </p>
+          <p>
+            <strong>Email:</strong> {user.email}
+          </p>
+          <p>
+            <strong>Rola:</strong> {user.role || "Użytkownik"}
+          </p>
+        </div>
+        <div className="buttons">
+          <button onClick={() => router.push("/profile/edit")}>
+            Edytuj profil
+          </button>
+          <button onClick={handleLogout}>Wyloguj</button>
+        </div>
+      </div>
     </div>
   );
 }

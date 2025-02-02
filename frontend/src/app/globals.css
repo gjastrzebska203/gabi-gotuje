@@ -482,4 +482,7 @@ div#user-page > div.content > div#user-recipes > div#recipes > div#recipe-item >
 }
 div#user-page > div.content > div#user-recipes > div#recipes > div#recipe-item > button {
   margin: 8px;
+}
+div#user-page > div.content button {
+  margin: 16px;
 }/*# sourceMappingURL=globals.css.map */
