@@ -21,8 +21,10 @@ div.page {
   height: 100%;
 }
 
-div {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+h2 {
+  color: $font-color;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 button {
@@ -30,9 +32,15 @@ button {
   border-radius: 16px;
   transition: box-shadow 0.3s ease-in-out;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: $body-color;
+  color: $font-color;
+  border: 1px solid $font-color;
   &:hover {
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: $button-hover-color;
+    color: $body-color;
+    border: 1px solid $button-hover-color;
   }
 }
 
@@ -60,6 +68,7 @@ nav {
 
 //
 // obrazy
+
 img {
   &#font {
     height: 50px;
@@ -71,17 +80,9 @@ img {
     height: 100%;
     object-fit: cover;
   }
-}
-
-button {
-  background-color: $body-color;
-  color: $font-color;
-  border: 1px solid $font-color;
-  &:hover {
-    cursor: pointer;
-    background-color: $button-hover-color;
-    color: $body-color;
-    border: 1px solid $body-color;
+  &.recipe-image {
+    max-height: 100%;
+    max-width: 100%;
   }
 }
 
@@ -110,8 +111,6 @@ div.log-sign-inner {
   border-radius: 16px;
   & h2 {
     color: $body-color;
-    font-size: 24px;
-    font-weight: bold;
     margin: 0px 20px 20px 20px;
   }
   & div#no-account {
@@ -122,6 +121,7 @@ div.log-sign-inner {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     & > p {
       color: $body-color;
     }
@@ -160,7 +160,7 @@ div.log-sign-inner {
 //
 // strona główna
 div.content {
-  border: 2px solid red;
+  // border: 2px solid red;
   box-shadow: none;
   display: flex;
   flex-direction: column;
@@ -187,5 +187,62 @@ div.content {
 
   .inputs input {
     width: 100%;
+  }
+}
+
+//
+// recipes
+div.content {
+  color: $font-color;
+  & > div#recipe-search {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    input {
+      width: 60%;
+      padding: 8px;
+      border-radius: 16px;
+      color: $font-color;
+      background-color: $body-color;
+      border: 1px solid $font-color;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      outline: none;
+      &::placeholder {
+        color: $font-color;
+      }
+      &:focus {
+        border: 1px solid $item-color;
+      }
+    }
+  }
+  & > div.grid {
+    width: 80%;
+    margin: 16px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 16px;
+    row-gap: 16px;
+    & > div.grid-item {
+      background-color: $item-color;
+      padding: 8px 0;
+      font-size: 14px;
+      text-align: center;
+      & > h3 {
+        color: $dark-font-color;
+        text-align: center;
+        margin-bottom: 8px;
+        font-size: 18px;
+      }
+      & > p {
+        color: $dark-font-color;
+        font-size: 16px;
+        margin: 8px;
+        text-align: left;
+      }
+      & > button {
+        margin-bottom: 8px;
+      }
+    }
   }
 }

@@ -34,32 +34,37 @@ export default function RecipesPage() {
   return (
     <div className="page">
       <Navigation></Navigation>
-      <h2>Lista przepisów</h2>
-      <input
-        type="text"
-        placeholder="Wyszukaj przepis..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-      {loading ? (
-        <p>Ładowanie...</p>
-      ) : error ? (
-        <p style={{ color: "red" }}>{error}</p>
-      ) : recipes.length === 0 ? (
-        <p>Brak wyników dla "{search}".</p>
-      ) : (
-        <ul>
-          {recipes.map((recipe) => (
-            <li key={recipe._id}>
-              <h3>{recipe.title}</h3>
-              <p>{recipe.description.substring(0, 100)}...</p>
-              <button onClick={() => router.push(`/recipes/${recipe._id}`)}>
-                Zobacz więcej
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="content">
+        <div id="recipe-search">
+          <h2>Lista przepisów</h2>
+          <input
+            type="text"
+            placeholder="Wyszukaj przepis..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="grid">
+          {loading ? (
+            <p>Ładowanie...</p>
+          ) : error ? (
+            <p className="error">{error}</p>
+          ) : recipes.length === 0 ? (
+            <p>Brak wyników dla "{search}".</p>
+          ) : (
+            recipes.map((recipe) => (
+              <div className="grid-item" key={recipe._id}>
+                <h3>{recipe.title}</h3>
+                <img className="recipe-image" src={recipe.image} alt="" />
+                <p>{recipe.description.substring(0, 100)}...</p>
+                <button onClick={() => router.push(`/recipes/${recipe._id}`)}>
+                  Zobacz więcej
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
     </div>
   );
 }
