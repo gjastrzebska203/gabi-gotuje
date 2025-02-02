@@ -7,6 +7,7 @@ import axios from "axios";
 export default function UserProfilePage() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
+  const [recipes, setRecipes] = useState([]);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -23,7 +24,19 @@ export default function UserProfilePage() {
       }
     };
 
+    const fetchUserRecipes = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/recipes/user/${id}`
+        );
+        setRecipes(response.data);
+      } catch (err) {
+        setError("Nie udało się pobrać przepisów użytkownika.");
+      }
+    };
+
     fetchUser();
+    fetchUserRecipes();
   }, [id]);
 
   if (error) return <p>{error}</p>;
@@ -44,6 +57,26 @@ export default function UserProfilePage() {
           <p>
             <strong>Rola:</strong> {user.role || "Użytkownik"}
           </p>
+        </div>
+        <div id="user-recipes">
+          <h3>Przepisy użytkownika:</h3>
+          {recipes.length === 0 ? (
+            <p>Ten użytkownik nie dodał jeszcze żadnych przepisów.</p>
+          ) : (
+            <div id="recipes">
+              {recipes.map((recipe) => (
+                <div key={recipe._id} id="recipe-item">
+                  <h4>{recipe.title}</h4>
+                  <img
+                    className="small"
+                    src={recipe.image}
+                    alt="recipe-image"
+                  />
+                  <button key={recipe._id}>Zobacz więcej...</button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

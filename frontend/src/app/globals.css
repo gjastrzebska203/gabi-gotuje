@@ -76,6 +76,10 @@ img.recipe-image {
   max-height: 100%;
   max-width: 100%;
 }
+img.small {
+  height: 120px;
+  width: 120px;
+}
 
 div.log-page {
   height: 100%;
@@ -455,4 +459,27 @@ div#user-page > div.content > div#user-info {
 }
 div#user-page > div.content h2 {
   color: #9a6a5c;
+}
+div#user-page > div.content > div#user-recipes {
+  text-align: center;
+  margin: 16px 0;
+}
+div#user-page > div.content > div#user-recipes > div#recipes {
+  margin: 8px 0;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  -moz-column-gap: 16px;
+       column-gap: 16px;
+  row-gap: 16px;
+}
+div#user-page > div.content > div#user-recipes > div#recipes > div#recipe-item {
+  display: flex;
+  flex-direction: column;
+  background-color: #e5b29f;
+}
+div#user-page > div.content > div#user-recipes > div#recipes > div#recipe-item > h4 {
+  margin: 8px;
+}
+div#user-page > div.content > div#user-recipes > div#recipes > div#recipe-item > button {
+  margin: 8px;
 }/*# sourceMappingURL=globals.css.map */

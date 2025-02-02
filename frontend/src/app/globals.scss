@@ -84,6 +84,10 @@ img {
     max-height: 100%;
     max-width: 100%;
   }
+  &.small {
+    height: 120px;
+    width: 120px;
+  }
 }
 
 //
@@ -479,6 +483,28 @@ div#user-page {
     }
     & h2 {
       color: $dark-font-color;
+    }
+    & > div#user-recipes {
+      text-align: center;
+      margin: 16px 0;
+      & > div#recipes {
+        margin: 8px 0;
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        column-gap: 16px;
+        row-gap: 16px;
+        & > div#recipe-item {
+          display: flex;
+          flex-direction: column;
+          background-color: $item-color;
+          & > h4 {
+            margin: 8px;
+          }
+          & > button {
+            margin: 8px;
+          }
+        }
+      }
     }
   }
 }

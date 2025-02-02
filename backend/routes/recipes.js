@@ -65,6 +65,17 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// pobieranie przepisu konkretnego użytkownika
+router.get("/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const recipes = await RecipeModel.find({ created_by: userId });
+    res.json(recipes);
+  } catch (err) {
+    res.status(500).json({ error: "Błąd pobierania przepisów użytkownika." });
+  }
+});
+
 // edycja przepisu
 router.put("/:id", authenticate, async (req, res) => {
   try {
