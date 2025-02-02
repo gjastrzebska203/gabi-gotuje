@@ -60,6 +60,9 @@ export default function UserProfilePage() {
             <strong>Rola:</strong> {user.role || "Użytkownik"}
           </p>
         </div>
+        <button onClick={() => router.push(`/users/${id}/live-message`)}>
+          Wiadomości na żywo
+        </button>
         <button onClick={() => router.push(`/users/${id}/message`)}>
           Wyślij wiadomość
         </button>
