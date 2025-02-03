@@ -586,3 +586,22 @@ div#chat-page {
     }
   }
 }
+
+//
+// wiadomości prywatne
+div#chat-box {
+  width: 30%;
+  margin: 0 auto;
+  & > div {
+    padding: 6px;
+    border: 2px solid red;
+    margin-top: 8px;
+    border: 1px solid $font-color;
+    border-radius: 10px;
+    &.my-message {
+      background-color: $item-color;
+      color: $dark-font-color;
+      border: 1px solid $dark-font-color;
+    }
+  }
+}

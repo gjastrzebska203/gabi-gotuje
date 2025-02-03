@@ -60,10 +60,10 @@ export default function UserProfilePage() {
             <strong>Rola:</strong> {user.role || "Użytkownik"}
           </p>
         </div>
-        <button onClick={() => router.push(`/users/${id}/live-message`)}>
+        <button onClick={() => router.push(`/users/${id}/live-messages`)}>
           Wiadomości na żywo
         </button>
-        <button onClick={() => router.push(`/users/${id}/message`)}>
+        <button onClick={() => router.push(`/users/${id}/messages`)}>
           Wyślij wiadomość
         </button>
         <div id="user-recipes">

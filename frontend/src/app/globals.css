@@ -551,4 +551,21 @@ div#chat-page > input::-moz-placeholder {
 }
 div#chat-page > input::placeholder {
   color: #b37f6f;
+}
+
+div#chat-box {
+  width: 30%;
+  margin: 0 auto;
+}
+div#chat-box > div {
+  padding: 6px;
+  border: 2px solid red;
+  margin-top: 8px;
+  border: 1px solid #b37f6f;
+  border-radius: 10px;
+}
+div#chat-box > div.my-message {
+  background-color: #e5b29f;
+  color: #9a6a5c;
+  border: 1px solid #9a6a5c;
 }/*# sourceMappingURL=globals.css.map */
