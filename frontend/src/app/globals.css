@@ -77,8 +77,7 @@ img.recipe-image {
   max-width: 100%;
 }
 img.small {
-  height: 120px;
-  width: 120px;
+  width: 100%;
 }
 
 div.log-page {
