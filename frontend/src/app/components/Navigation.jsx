@@ -3,10 +3,10 @@ import { useRouter } from "next/navigation";
 
 export default function Navigation() {
   const router = useRouter();
-  const isLoggedIn = localStorage.getItem("token") ? true : false;
+  const isLoggedIn = sessionStorage.getItem("token") ? true : false;
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     router.push("/log-in");
   };
 

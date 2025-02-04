@@ -33,7 +33,7 @@ export default function AddRecipePage() {
     e.preventDefault();
     setError("");
 
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       return setError("Musisz być zalogowany, aby dodać przepis.");
     }

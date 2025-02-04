@@ -15,7 +15,7 @@ export default function LoginPage() {
         `${process.env.NEXT_PUBLIC_API_URL}/users/login`,
         data
       );
-      localStorage.setItem("token", response.data.token);
+      sessionStorage.setItem("token", response.data.token);
       router.push("/");
     } catch (err) {
       setError(err.response?.data?.error || "Nieprawidłowe dane logowania!");

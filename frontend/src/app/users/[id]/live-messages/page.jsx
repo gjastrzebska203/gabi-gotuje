@@ -12,7 +12,7 @@ export default function PrivateChatPage() {
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return;
 
     const fetchUser = async () => {

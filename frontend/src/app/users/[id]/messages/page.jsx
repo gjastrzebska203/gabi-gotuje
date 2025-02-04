@@ -12,7 +12,7 @@ export default function PrivateMessagesPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return;
 
     const fetchUserAndMessages = async () => {
@@ -45,7 +45,7 @@ export default function PrivateMessagesPage() {
   const sendMessage = async () => {
     if (!message.trim()) return;
 
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       setError("Brak tokena, musisz się zalogować.");
       return;

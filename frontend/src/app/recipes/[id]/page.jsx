@@ -66,7 +66,7 @@ export default function RecipeDetailsPage() {
     };
 
     const getUserId = async () => {
-      const token = localStorage.getItem("token");
+      const token = sessionStorage.getItem("token");
       if (!token) return;
 
       try {
@@ -134,7 +134,7 @@ export default function RecipeDetailsPage() {
   };
 
   const handleDelete = async () => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) return;
 
     try {
@@ -150,7 +150,7 @@ export default function RecipeDetailsPage() {
   const handleAddComment = async () => {
     if (!commentText.trim()) return;
 
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       return alert("Musisz być zalogowany, aby dodać komentarz.");
     }
@@ -185,7 +185,7 @@ export default function RecipeDetailsPage() {
   };
 
   const handleUpdateComment = async (commentId) => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       return alert("Musisz być zalogowany, aby edytować komentarz.");
     }
@@ -209,7 +209,7 @@ export default function RecipeDetailsPage() {
   };
 
   const handleDeleteComment = async (commentId) => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       return alert("Musisz być zalogowany, aby usunąć komentarz.");
     }
@@ -228,7 +228,7 @@ export default function RecipeDetailsPage() {
   };
 
   const handleRating = async (rating) => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       setError("Musisz być zalogowany, aby ocenić przepis.");
     }
@@ -261,7 +261,7 @@ export default function RecipeDetailsPage() {
   };
 
   const handleDeleteRating = async () => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (!token) {
       console.log("Musisz być zalogowany, aby usunąć ocenę.");
     }
