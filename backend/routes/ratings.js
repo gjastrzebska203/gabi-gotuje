@@ -1,8 +1,6 @@
 const express = require("express");
 const RatingModel = require("../models/RatingModel");
-const RecipeModel = require("../models/RecipeModel");
 const authenticate = require("../middlewares/auth");
-const { default: mongoose } = require("mongoose");
 const router = express.Router();
 
 // dodanie oceny
@@ -21,10 +19,10 @@ router.post("/", authenticate, async (req, res) => {
     });
 
     if (userRating) {
-      console.log("🔄 Aktualizacja oceny:", userRating);
+      console.log("Aktualizacja oceny:", userRating);
       userRating.rating = rating;
       await userRating.save();
-      return res.json(userRating);
+      return res.json({ message: "Ocena zaktualizowana", rating: userRating });
     }
 
     const newRating = new RatingModel({
@@ -34,7 +32,7 @@ router.post("/", authenticate, async (req, res) => {
     });
     await newRating.save();
 
-    res.status(201).json(newRating);
+    res.status(201).json({ message: "Ocena dodana", rating: newRating });
   } catch (err) {
     res.status(500).json({ error: "Błąd serwera" });
   }
@@ -50,8 +48,8 @@ router.get("/average/:recipe_id", async (req, res) => {
     }
 
     const sum = ratings.reduce((acc, r) => acc + r.rating, 0);
-    const average = sum / ratings.length;
-    res.json({ average: average.toFixed(1), count: ratings.length });
+    const average = Number((sum / ratings.length).toFixed(1));
+    res.json({ average, count: ratings.length });
   } catch (err) {
     res.status(500).json({ error: "Błąd serwera" });
   }
@@ -78,12 +76,20 @@ router.get("/:recipe_id", authenticate, async (req, res) => {
 // usunięcie oceny
 router.delete("/:recipe_id", authenticate, async (req, res) => {
   try {
-    await RatingModel.findOneAndDelete({
+    const deletedRating = await RatingModel.findOneAndDelete({
       user_id: req.user.id,
       recipe_id: req.params.recipe_id,
     });
+
+    if (!deletedRating) {
+      return res
+        .status(404)
+        .json({ error: "Nie znaleziono oceny do usunięcia" });
+    }
+
     res.json({ message: "Ocena została usunięta" });
   } catch (err) {
+    console.error("Błąd usuwania oceny:", err.message);
     res.status(500).json({ error: "Błąd serwera" });
   }
 });
