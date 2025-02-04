@@ -83,6 +83,23 @@ export default function RecipeDetailsPage() {
       }
     };
 
+    const fetchUserRating = async () => {
+      try {
+        const token = sessionStorage.getItem("token");
+        if (!token) return;
+
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/ratings/${id}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
+        setUserRating(response.data.rating); // Ustawiamy ocenę użytkownika
+      } catch (err) {
+        console.error("Błąd pobierania oceny użytkownika:", err);
+      }
+    };
+
     if (id) {
       fetchRecipe();
       const viewedRecipes = Cookies.get("viewedRecipes");
@@ -95,6 +112,7 @@ export default function RecipeDetailsPage() {
         });
       }
       fetchRatings();
+      fetchUserRating();
       fetchComments();
       getUserId();
     }
