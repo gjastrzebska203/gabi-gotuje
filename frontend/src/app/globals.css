@@ -567,4 +567,7 @@ div#chat-box > div.my-message {
   background-color: #e5b29f;
   color: #9a6a5c;
   border: 1px solid #9a6a5c;
+}
+div#chat-box button {
+  margin-left: 8px;
 }/*# sourceMappingURL=globals.css.map */

@@ -602,4 +602,7 @@ div#chat-box {
       border: 1px solid $dark-font-color;
     }
   }
+  & button {
+    margin-left: 8px;
+  }
 }

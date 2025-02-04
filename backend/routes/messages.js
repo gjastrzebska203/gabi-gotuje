@@ -48,4 +48,40 @@ router.get("/:recipientId/:senderId", authenticateUser, async (req, res) => {
   }
 });
 
+router.put("/:messageId", authenticateUser, async (req, res) => {
+  const { message } = req.body;
+  const { messageId } = req.params;
+
+  if (!message.trim()) {
+    return res
+      .status(400)
+      .json({ error: "Treść wiadomości nie może być pusta." });
+  }
+
+  try {
+    const existingMessage = await MessageModel.findById(messageId);
+
+    if (!existingMessage) {
+      return res.status(404).json({ error: "Wiadomość nie istnieje." });
+    }
+
+    if (existingMessage.senderId.toString() !== req.user.id) {
+      return res
+        .status(403)
+        .json({ error: "Nie możesz edytować tej wiadomości." });
+    }
+
+    existingMessage.message = message;
+    await existingMessage.save();
+
+    res.json({
+      message: "Wiadomość została zaktualizowana.",
+      updatedMessage: existingMessage,
+    });
+  } catch (err) {
+    console.error("Błąd edytowania wiadomości:", err.message);
+    res.status(500).json({ error: "Błąd podczas edycji wiadomości." });
+  }
+});
+
 module.exports = router;

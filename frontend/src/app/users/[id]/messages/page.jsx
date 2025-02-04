@@ -6,6 +6,8 @@ import axios from "axios";
 
 export default function PrivateMessagesPage() {
   const { id } = useParams();
+  const [editingMessageId, setEditingMessageId] = useState(null);
+  const [editText, setEditText] = useState("");
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [userId, setUserId] = useState(null);
@@ -71,6 +73,39 @@ export default function PrivateMessagesPage() {
     }
   };
 
+  const editMessage = async (messageId) => {
+    if (!editText.trim()) return;
+
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+      setError("Musisz być zalogowany, aby edytować wiadomość.");
+      return;
+    }
+
+    try {
+      const res = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_URL}/messages/${messageId}`,
+        { message: editText },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setMessages(
+        messages.map((msg) =>
+          msg._id === messageId ? { ...msg, message: editText } : msg
+        )
+      );
+
+      setEditingMessageId(null);
+      setEditText("");
+    } catch (err) {
+      console.error(
+        "Błąd edycji wiadomości:",
+        err.response?.data || err.message
+      );
+      setError("Błąd edytowania wiadomości.");
+    }
+  };
+
   return (
     <div className="page">
       <Navigation />
@@ -81,17 +116,42 @@ export default function PrivateMessagesPage() {
           <p>Brak wiadomości.</p>
         ) : (
           <div id="chat-box">
-            {messages.map((msg, index) => (
+            {messages.map((msg) => (
               <div
-                key={index}
+                key={msg._id}
                 className={
                   msg.senderId === userId ? "my-message" : "other-message"
                 }
               >
-                <strong>
-                  {msg.senderId === userId ? "Ty" : "Użytkownik"}:
-                </strong>{" "}
-                {msg.message}
+                <strong>{msg.senderId === userId ? "Ty" : "Oni"}:</strong>
+
+                {editingMessageId === msg._id ? (
+                  <>
+                    <input
+                      type="text"
+                      value={editText}
+                      onChange={(e) => setEditText(e.target.value)}
+                    />
+                    <button onClick={() => editMessage(msg._id)}>Zapisz</button>
+                    <button onClick={() => setEditingMessageId(null)}>
+                      Anuluj
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <span>{msg.message}</span>
+                    {msg.senderId === userId && (
+                      <button
+                        onClick={() => {
+                          setEditingMessageId(msg._id);
+                          setEditText(msg.message);
+                        }}
+                      >
+                        Edytuj
+                      </button>
+                    )}
+                  </>
+                )}
               </div>
             ))}
           </div>
